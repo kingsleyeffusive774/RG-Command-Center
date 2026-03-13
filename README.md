@@ -4,10 +4,32 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-d4a843?style=flat-square" alt="Version">
+  <a href="https://github.com/GareBear99/RG-Command-Center/releases/tag/v1.0.0"><img src="https://img.shields.io/badge/version-1.0.0-d4a843?style=flat-square" alt="Version"></a>
+  <a href="https://github.com/GareBear99/RG-Command-Center/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-8e97a8?style=flat-square" alt="License"></a>
+  <a href="https://github.com/GareBear99/RG-Command-Center/stargazers"><img src="https://img.shields.io/github/stars/GareBear99/RG-Command-Center?style=flat-square&color=d4a843" alt="Stars"></a>
+  <a href="https://github.com/GareBear99/RG-Command-Center/network/members"><img src="https://img.shields.io/github/forks/GareBear99/RG-Command-Center?style=flat-square&color=8e97a8" alt="Forks"></a>
+  <a href="https://github.com/GareBear99/RG-Command-Center/issues"><img src="https://img.shields.io/github/issues/GareBear99/RG-Command-Center?style=flat-square&color=4b8fcc" alt="Issues"></a>
+  <a href="https://github.com/GareBear99/RG-Command-Center/releases"><img src="https://img.shields.io/github/release-date/GareBear99/RG-Command-Center?style=flat-square&color=2ec97a&label=released" alt="Release Date"></a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/platform-local--first-2ec97a?style=flat-square" alt="Platform">
   <img src="https://img.shields.io/badge/data-real--source--only-4b8fcc?style=flat-square" alt="Data Policy">
-  <img src="https://img.shields.io/badge/license-MIT-8e97a8?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/dependencies-zero-2ec97a?style=flat-square" alt="Zero Dependencies">
+  <img src="https://img.shields.io/badge/listings-615%2B-d4a843?style=flat-square" alt="Listings">
+  <img src="https://img.shields.io/badge/markets-5_cities-4b8fcc?style=flat-square" alt="Markets">
+  <img src="https://img.shields.io/badge/python-3.8%2B-3776ab?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/javascript-vanilla-f7df1e?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript">
+</p>
+
+<p align="center">
+  <a href="https://ko-fi.com/GareBear99"><img src="https://img.shields.io/badge/Ko--fi-Support_this_project-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi"></a>
+  <a href="https://buymeacoffee.com/GareBear99"><img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee"></a>
+  <a href="https://github.com/sponsors/GareBear99"><img src="https://img.shields.io/badge/GitHub_Sponsors-Sponsor-ea4aaa?style=for-the-badge&logo=github-sponsors&logoColor=white" alt="GitHub Sponsors"></a>
+</p>
+
+<p align="center">
+  <sub>If you find this useful, consider giving it a ⭐ — it helps others discover the project.</sub>
 </p>
 
 ---
@@ -218,6 +240,32 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ---
 
+## Support the Project
+
+If R&G Command Center is useful to you, consider supporting continued development:
+
+<p align="center">
+  <a href="https://ko-fi.com/GareBear99"><img src="https://img.shields.io/badge/Ko--fi-Support_this_project-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi"></a>
+  <a href="https://buymeacoffee.com/GareBear99"><img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee"></a>
+  <a href="https://github.com/sponsors/GareBear99"><img src="https://img.shields.io/badge/GitHub_Sponsors-Sponsor-ea4aaa?style=for-the-badge&logo=github-sponsors&logoColor=white" alt="GitHub Sponsors"></a>
+  <a href="https://paypal.me/GareBear99"><img src="https://img.shields.io/badge/PayPal-Donate-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
+</p>
+
+You can also support by:
+- ⭐ **Starring** this repo — helps with discoverability
+- 🍴 **Forking** and contributing code or data
+- 📣 **Sharing** with real estate professionals who could use it
+- 🐛 **Reporting issues** or suggesting features
+
+---
+
 ## License
 
 [MIT](LICENSE) — R&G Realty Group
+
+---
+
+<p align="center">
+  <sub>Built with care by <a href="https://github.com/GareBear99">GareBear99</a> · R&G Realty Group</sub><br>
+  <sub>Vancouver · Calgary · Edmonton · Winnipeg · Montréal</sub>
+</p>
