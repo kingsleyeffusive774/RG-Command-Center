@@ -52,8 +52,6 @@ Handler: https://github.com/GareBear99/ARC-Core
 - **Transparent scoring** — deal scores break down into weighted components with full explanations.
 - **Source-aware** — tracks field provenance, authority tiers, and flags cross-source conflicts.
 
-GPS: https://github.com/GareBear99/A-real-time-spatial-signal-intelligence-engine.
-
 ---
 
 ## Features
@@ -64,6 +62,8 @@ GPS: https://github.com/GareBear99/A-real-time-spatial-signal-intelligence-engin
 - **`deals.html`** — Top deals surface ranked by composite deal score
 - **`directory.html`** — Province-aware public listing browser
 - **`listing-detail.html`** — Full listing detail with interactive GPS map
+
+  Public Site: https://garebear99.github.io/RG-Command-Center/
 
 ### Internal Command Center (SHA-256 Auth)
 
@@ -79,6 +79,9 @@ GPS: https://github.com/GareBear99/A-real-time-spatial-signal-intelligence-engin
 - Interactive controls: zoom +/−, layer switching, overlay toggles (marker + 200m area radius)
 - Touch support: pinch-to-zoom, single-finger drag
 - Listing card thumbnails: real map tiles with GPS precision indicators
+
+  GPS: https://github.com/GareBear99/A-real-time-spatial-signal-intelligence-engine.
+
 
 ### Deal Scoring Engine
 
