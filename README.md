@@ -81,7 +81,7 @@
 - Touch support: pinch-to-zoom, single-finger drag
 - Listing card thumbnails: real map tiles with GPS precision indicators
 
-  **GPS:** https://github.com/GareBear99/A-real-time-spatial-signal-intelligence-engine.
+  **GPS:** https://github.com/GareBear99/A-real-time-spatial-signal-intelligence-engine
 
 
 ### Deal Scoring Engine
