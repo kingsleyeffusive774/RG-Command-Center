@@ -1,0 +1,93 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pipeline — RAG Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0c0d10;--panel:#131417;--panel2:#191b20;--border:#22252d;--border2:#2a2e38;--accent:#d4a843;--hot:#e8445a;--warm:#d4a843;--cold:#4b8fcc;--green:#2ec97a;--ink:#eaecf0;--ink2:#8e97a8;--ink3:#50586a;--mono:'DM Mono',monospace;--serif:'Fraunces',Georgia,serif;--display:'Syne',sans-serif;--radius:10px}
+html{font-family:var(--display);background:var(--bg);color:var(--ink)}body{min-height:100vh}button{font-family:inherit;cursor:pointer}a{color:inherit;text-decoration:none}
+.topbar{height:52px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:200}
+.topbar-logo{display:flex;align-items:center;gap:10px}.logo-hex{width:28px;height:28px;background:var(--accent);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:8px;color:#000}
+.topbar-name{font-weight:700;font-size:14px}.topbar-sub{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase}
+.topbar-tabs{display:flex;gap:2px}.tab-btn{padding:6px 16px;border-radius:6px;background:transparent;border:1px solid transparent;font-size:12px;font-weight:600;color:var(--ink3);transition:all .15s}.tab-btn:hover{color:var(--ink);background:var(--panel2)}.tab-btn.active{color:var(--accent);background:rgba(212,168,67,.08);border-color:rgba(212,168,67,.2)}
+.main{padding:28px 28px 60px;max-width:1600px;margin:0 auto}
+.page-hd{margin-bottom:20px}.page-hd h1{font-family:var(--serif);font-size:28px;font-weight:600;margin-bottom:3px}.page-hd p{font-family:var(--mono);font-size:10px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase}
+.kanban{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;min-height:calc(100vh - 180px)}
+.col{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;min-height:300px}
+.col-hd{padding:14px 14px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.col-title{font-size:12px;font-weight:700;letter-spacing:.02em}.col-count{font-family:var(--mono);font-size:10px;color:var(--ink3);background:var(--panel2);padding:2px 8px;border-radius:10px}
+.col-body{flex:1;padding:8px;overflow-y:auto;min-height:100px}
+.col-body.drag-over{background:rgba(212,168,67,.06);border:1px dashed rgba(212,168,67,.3);border-radius:8px}
+.deal-card{background:var(--panel2);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:8px;cursor:grab;transition:all .15s}
+.deal-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.deal-card.dragging{opacity:.5;transform:rotate(2deg)}
+.dc-name{font-weight:700;font-size:13px;margin-bottom:4px}.dc-meta{font-family:var(--mono);font-size:10px;color:var(--ink3);margin-bottom:6px}
+.dc-value{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--accent)}
+.dc-agent{font-family:var(--mono);font-size:9px;color:var(--ink3);margin-top:6px}
+.tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;border:1px solid transparent;white-space:nowrap}.tag.hot{background:rgba(232,68,90,.08);color:var(--hot);border-color:rgba(232,68,90,.2)}.tag.warm{background:rgba(212,168,67,.08);color:var(--warm);border-color:rgba(212,168,67,.2)}.tag.green{background:rgba(46,201,122,.08);color:var(--green);border-color:rgba(46,201,122,.2)}
+.stats-row{display:flex;gap:12px;margin-bottom:20px}.stat-mini{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;flex:1}.stat-mini .lbl{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}.stat-mini .val{font-family:var(--serif);font-size:28px;font-weight:600}
+.btn-p{padding:8px 16px;background:var(--accent);border:none;border-radius:7px;color:#000;font-weight:700;font-size:12px}
+@media(max-width:1200px){.kanban{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.kanban{grid-template-columns:1fr}}
+</style>
+<script src="data/bootstrap.js"></script><script src="assets/js/utils.js"></script></head><body>
+<header class="topbar"><div class="topbar-logo"><div class="logo-hex">RAG</div><div><div class="topbar-name">RAG Command Center</div><div class="topbar-sub">Deal Pipeline</div></div></div>
+<nav class="topbar-tabs"><a class="tab-btn" href="command-center.html">Dashboard</a><a class="tab-btn" href="contacts.html">Contacts</a><a class="tab-btn active" href="pipeline.html">Pipeline</a><a class="tab-btn" href="commission.html">Commissions</a><a class="tab-btn" href="settings.html">Settings</a></nav></header>
+<div class="main">
+<div class="page-hd"><h1 style="font-family:var(--serif)">Deal Pipeline</h1><p>drag deals between stages · track from lead to close</p></div>
+<div class="stats-row"><div class="stat-mini"><div class="lbl">Active Deals</div><div class="val" id="s-active">0</div></div><div class="stat-mini"><div class="lbl">Pipeline Value</div><div class="val" id="s-value">$0</div></div><div class="stat-mini"><div class="lbl">Closed This Month</div><div class="val" style="color:var(--green)" id="s-closed">0</div></div><div class="stat-mini"><div class="lbl">Conversion Rate</div><div class="val" id="s-conv">0%</div></div></div>
+<div class="kanban" id="kanban"></div></div>
+<script>
+const STAGES = ['new_lead','contacted','showing','offer','under_contract','closed'];
+const STAGE_LABELS = {new_lead:'New Lead',contacted:'Contacted',showing:'Showing',offer:'Offer',under_contract:'Under Contract',closed:'Closed'};
+const PIPE_KEY = 'rag_pipeline_deals';
+function loadDeals(){ try{ return JSON.parse(localStorage.getItem(PIPE_KEY)||'[]'); }catch{ return []; } }
+function saveDeals(arr){ localStorage.setItem(PIPE_KEY, JSON.stringify(arr)); }
+
+function renderKanban(){
+  const deals = loadDeals();
+  const kanban = document.getElementById('kanban');
+  document.getElementById('s-active').textContent = deals.filter(d=>d.stage!=='closed').length;
+  document.getElementById('s-value').textContent = '$'+deals.filter(d=>d.stage!=='closed').reduce((s,d)=>s+(d.value||0),0).toLocaleString();
+  document.getElementById('s-closed').textContent = deals.filter(d=>d.stage==='closed').length;
+  const total = deals.length || 1;
+  document.getElementById('s-conv').textContent = Math.round(deals.filter(d=>d.stage==='closed').length/total*100)+'%';
+
+  kanban.innerHTML = STAGES.map(stage => {
+    const items = deals.filter(d=>d.stage===stage);
+    return `<div class="col" data-stage="${stage}">
+      <div class="col-hd"><span class="col-title">${STAGE_LABELS[stage]}</span><span class="col-count">${items.length}</span></div>
+      <div class="col-body" data-drop="${stage}" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="dropDeal(event,'${stage}')">
+        ${items.map(d => `<div class="deal-card" draggable="true" ondragstart="dragDeal(event,'${d.id}')" data-id="${d.id}">
+          <div class="dc-name">${escapeHtml(d.contact||'Unnamed')}</div>
+          <div class="dc-meta">${escapeHtml(d.property||'No property yet')}</div>
+          <div class="dc-value">$${(d.value||0).toLocaleString()}</div>
+          <div class="dc-agent">${escapeHtml(d.agent||'Unassigned')} · ${d.created_at ? new Date(d.created_at).toLocaleDateString() : 'new'}</div>
+        </div>`).join('')}
+        ${!items.length ? '<div style="text-align:center;padding:20px;font-family:var(--mono);font-size:10px;color:var(--ink3)">Drop deals here</div>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let draggedId = null;
+function dragDeal(e, id){ draggedId = id; e.dataTransfer.effectAllowed = 'move'; e.target.classList.add('dragging'); }
+function dropDeal(e, stage){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if(!draggedId) return;
+  const deals = loadDeals();
+  const deal = deals.find(d=>d.id===draggedId);
+  if(deal){ deal.stage = stage; deal.updated_at = new Date().toISOString(); }
+  saveDeals(deals);
+  draggedId = null;
+  renderKanban();
+}
+
+/* Seed a sample deal if empty for demo */
+if(!loadDeals().length){
+  saveDeals([
+    {id:'d1',contact:'Sample Buyer',property:'123 Main St, Victoria',value:550000,agent:'Amit Khatkar',stage:'new_lead',created_at:new Date().toISOString()},
+    {id:'d2',contact:'Sample Seller',property:'456 Oak Bay Ave',value:780000,agent:'Ricki Kohli',stage:'showing',created_at:new Date().toISOString()}
+  ]);
+}
+renderKanban();
+</script></body></html>

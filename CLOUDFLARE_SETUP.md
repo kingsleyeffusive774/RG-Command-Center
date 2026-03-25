@@ -1,6 +1,6 @@
 # Cloudflare Worker API — Setup Guide
 
-Backend API for R&G Command Center, deployed on Cloudflare Workers with KV storage.
+Backend API for RAG Command Center, deployed on Cloudflare Workers with KV storage.
 
 ## Architecture
 

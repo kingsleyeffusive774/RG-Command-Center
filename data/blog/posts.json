@@ -1,0 +1,29 @@
+[
+  {
+    "slug": "2026-victoria-home-sellers-checklist",
+    "title": "2026 Home Sellers Checklist for Victoria, BC",
+    "date": "2026-03-20",
+    "author": "Amit Khatkar",
+    "category": "Sellers",
+    "summary": "Selling a home in Victoria, BC in 2026 requires preparation, strategy, and the right data. Here's your complete checklist.",
+    "content": "<p>Selling a home in Victoria, BC in 2026 isn't just about putting up a sign and waiting. The city operates as a unique micro-market within Vancouver Island, and buyers today are more informed than ever — many of them are using data platforms like RAG Command Center to score deals before they even contact an agent.</p><h3>Before You List</h3><ul><li><strong>Get a pre-listing inspection</strong> — Surprises during the buyer's inspection kill deals. Know your home's condition upfront.</li><li><strong>Order a title search</strong> — Check for any encumbrances, easements, or liens that could complicate the sale.</li><li><strong>Gather strata documents</strong> — If selling a condo or townhouse, you'll need Form B, meeting minutes, financial statements, and the depreciation report.</li><li><strong>Complete the Property Disclosure Statement</strong> — This is legally required in BC and protects both you and the buyer.</li></ul><h3>Pricing Strategy</h3><p>Victoria's market varies dramatically by neighbourhood. A home in Oak Bay commands a very different $/sqft than one in Langford. Our deal scoring engine benchmarks every listing against area medians — overpriced homes get flagged as stale, while well-priced ones surface as top deals. Price strategically from day one.</p><h3>Marketing Your Home</h3><ul><li>Professional photography and virtual tours are non-negotiable</li><li>Social media advertising (Facebook/Instagram) targeted to active buyers in Victoria</li><li>Listing syndication across RAG platform, MLS, and partner networks</li><li>Open houses and targeted showings for pre-qualified buyers</li></ul><p>The Victoria market rewards preparation and data-driven pricing. Work with an agent who understands both.</p>"
+  },
+  {
+    "slug": "understanding-deal-scores",
+    "title": "How RAG Deal Scores Work — And Why They Matter",
+    "date": "2026-03-15",
+    "author": "Gary Doman",
+    "category": "Platform",
+    "summary": "Every listing on RAG gets a transparent 0-100% deal score. Here's exactly how it's calculated.",
+    "content": "<p>Every listing on the RAG Command Center receives a composite deal score between 0 and 100%. Unlike black-box algorithms at other platforms, our scoring is fully transparent — you can see exactly which components contribute to each score and why.</p><h3>The Six Components</h3><ul><li><strong>Below Market (35% weight)</strong> — We calculate $/sqft and compare it to the area median for the same city and property type. Listings priced significantly below the median score higher.</li><li><strong>Price Drop (20% weight)</strong> — Recent and large price reductions indicate motivated sellers. Both the magnitude and recency of drops factor into the score.</li><li><strong>Days on Market (15% weight)</strong> — Fresh listings score higher for urgency, while high-DOM listings score higher for negotiation leverage. The engine weighs both signals.</li><li><strong>Area Comps (15% weight)</strong> — The density of comparable listings in the area. More comps means more confidence in the market position assessment.</li><li><strong>Features (10% weight)</strong> — A bed/bath utility score based on the property's livability features relative to its price point.</li><li><strong>Data Freshness (5% weight)</strong> — How recent the source data is. Stale data gets penalized.</li></ul><h3>Source Reconciliation</h3><p>Before scoring, every listing goes through our multi-source reconciliation pipeline. When different sources disagree on a field (e.g., one says 3 beds, another says 4), we flag the conflict and use authority tiers to pick the canonical value. The deal score is always calculated on reconciled, verified data.</p><p>This is the advantage of data intelligence over raw MLS feeds — you get a cleaner, more trustworthy signal.</p>"
+  },
+  {
+    "slug": "bc-first-time-buyer-programs-2026",
+    "title": "BC First-Time Home Buyer Programs in 2026",
+    "date": "2026-03-10",
+    "author": "Ricki Kohli",
+    "category": "Buyers",
+    "summary": "A complete guide to the programs, exemptions, and incentives available to first-time buyers in British Columbia.",
+    "content": "<p>If you're buying your first home in British Columbia, there are several government programs designed to help reduce your upfront costs. Here's what's available in 2026.</p><h3>Property Transfer Tax (PTT) Exemption</h3><p>First-time buyers in BC may be exempt from the Property Transfer Tax on homes up to $500,000 (with a partial exemption up to $525,000). The property must be your primary residence, and you must be a Canadian citizen or permanent resident.</p><h3>First Home Savings Account (FHSA)</h3><p>The federal FHSA lets you save up to $8,000 per year (lifetime max $40,000) in a tax-advantaged account specifically for your first home purchase. Contributions are tax-deductible, and withdrawals for a qualifying home are tax-free.</p><h3>Home Buyers' Plan (HBP)</h3><p>You can withdraw up to $35,000 from your RRSP to put toward your first home (tax-free, as long as you repay over 15 years). This can be combined with the FHSA.</p><h3>GST/HST New Housing Rebate</h3><p>If buying a newly built home, you may qualify for a partial rebate of the GST paid on the purchase price (for homes under $450,000).</p><h3>CMHC Insurance</h3><p>With as little as 5% down, you can purchase a home with CMHC mortgage insurance. While the premium adds to your mortgage, it enables home ownership much sooner. Use our <a href='mortgage.html'>Mortgage Calculator</a> to see the impact on your payments.</p>"
+  }
+]

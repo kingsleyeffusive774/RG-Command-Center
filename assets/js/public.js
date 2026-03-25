@@ -155,6 +155,7 @@ function parsePublicFilterState(){
   return {
     q: (params.get('q') || '').trim(),
     beds: toNum(params.get('beds')),
+    baths: toNum(params.get('baths')),
     type: normalizeType(params.get('type')),
     maxPrice: toNum(params.get('max')),
     sort: normalizeType(params.get('sort')) || 'deal_desc'
@@ -164,12 +165,14 @@ function currentPublicFilterState(){
   const defaults = parsePublicFilterState();
   const qEl = document.getElementById('public-search-input');
   const bedsEl = document.getElementById('public-filter-beds');
+  const bathsEl = document.getElementById('public-filter-baths');
   const typeEl = document.getElementById('public-filter-type');
   const priceEl = document.getElementById('public-filter-price');
   const activeSort = document.querySelector('[data-public-sort].active');
   return {
     q: (qEl?.value ?? defaults.q).trim(),
     beds: toNum(bedsEl?.value ?? defaults.beds),
+    baths: toNum(bathsEl?.value ?? defaults.baths),
     type: normalizeType(typeEl?.value ?? defaults.type),
     maxPrice: toNum(priceEl?.value ?? defaults.maxPrice),
     sort: normalizeType(activeSort?.dataset?.publicSort || defaults.sort || 'deal_desc')
@@ -215,6 +218,7 @@ function matchesPublicFilters(listing, state){
     if (!tokens.every(token => blob.includes(token))) return false;
   }
   if (state.beds && toNum(listing.beds) < state.beds) return false;
+  if (state.baths && toNum(listing.baths) < state.baths) return false;
   if (state.maxPrice && toNum(listing.list_price) > state.maxPrice) return false;
   if (state.type) {
     const listingType = toCommercialType(listing.property_type);
@@ -269,7 +273,7 @@ function bindPublicControls(){
       }
     });
   }
-  ['public-filter-beds','public-filter-type','public-filter-price'].forEach(id => {
+  ['public-filter-beds','public-filter-baths','public-filter-type','public-filter-price'].forEach(id => {
     const el = document.getElementById(id);
     if (!el || el.dataset.bound) return;
     el.dataset.bound = '1';
@@ -316,7 +320,7 @@ async function renderPublicListings(targetId, onlyId){
         <div class=\"row\"><div><div class=\"price\">$${escapeHtml(l.price_label || Number(l.list_price||0).toLocaleString())}</div><div class=\"addr\">${escapeHtml(l.address||'')}</div><div class=\"meta\">${escapeHtml(l.city||'')}, ${escapeHtml(l.province||'')} · ${escapeHtml(listingPostedLabel(l))}${publicListingFactLine(l, benchmarks) ? ` · ${escapeHtml(publicListingFactLine(l, benchmarks))}` : ''}</div></div><div><span class=\"pill\" style=\"color:#8f6a14;border-color:#e8c56f;background:#fff7e2\">Deal ${Number(l.deal_score||0)}%</span>${(() => { const m = publicListingMarketPosition(l, benchmarks); return m?.label ? `<span class=\"pill\" style=\"margin-left:8px;color:${m.direction==='below'?'#1f7a46':(m.direction==='above'?'#8a4a12':'#41536a')};border-color:${m.direction==='below'?'#95dbb2':(m.direction==='above'?'#f1c28f':'#c9d3de')};background:${m.direction==='below'?'#ebfff3':(m.direction==='above'?'#fff4ea':'#f4f8fc')}\">${escapeHtml(m.label)}</span>` : ''; })()}</div></div>
         <div class="dealbox">${escapeHtml(l.public_summary||'')}</div>
         ${l.source_inconsistency?.public_note ? `<div class="banner" style="margin-top:14px">Source note: ${escapeHtml(l.source_inconsistency.public_note)}</div>`:''}
-        <div class="foot"><a class="btn ghost" href="listing-detail.html?id=${encodeURIComponent(l.id)}">View Listing</a><button class="btn gold" onclick="openInquiry('${escapeAttr(l.id)}')">Ask R&G</button></div>
+        <div class="foot"><a class="btn ghost" href="listing-detail.html?id=${encodeURIComponent(l.id)}">View Listing</a><button class="btn gold" onclick="openInquiry('${escapeAttr(l.id)}')">Ask RAG</button></div>
       </div>
     </article>`).join('');
 }
@@ -335,8 +339,14 @@ function setupInquiryForm(){
       source: 'public_website', intent: data.intent, name: data.name, email: data.email, phone: data.phone,
       market: data.market, budget: data.budget, timeline: data.timeline, notes: data.notes, branch_hint: data.branch_hint || 'general_queue'
     });
+    /* fire-and-forget to Cloudflare Worker backend */
+    const API_BASE = 'https://rag-command-center-api.admension.workers.dev';
+    fetch(`${API_BASE}/api/inquiries`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).catch(() => {});
     form.reset(); closeInquiry();
-    alert('Inquiry routed to R&G Command Center. It is now in the internal review queue.');
+    alert('Inquiry routed to RAG Command Center. It is now in the internal review queue.');
   });
 }
 
@@ -394,7 +404,7 @@ async function renderDirectoryListings(){
         <div class="badges">${GRR.badgeTags(l).map(t=>`<span class="tag ${escapeAttr(t[1])}">${escapeHtml(t[0])}</span>`).join('')}<span class="tag gray">${escapeHtml(l.province||'')}</span></div>
         <div class=\"row\"><div><div class=\"price\">$${escapeHtml(l.price_label || Number(l.list_price||0).toLocaleString())}</div><div class=\"addr\">${escapeHtml(l.address||'')}</div><div class=\"meta\">${escapeHtml(l.city||'')}, ${escapeHtml(l.province||'')} · ${escapeHtml(listingPostedLabel(l))}${publicListingFactLine(l, benchmarks) ? ` · ${escapeHtml(publicListingFactLine(l, benchmarks))}` : ''}</div></div><div><span class=\"pill\" style=\"color:#8f6a14;border-color:#e8c56f;background:#fff7e2\">Deal ${Number(l.deal_score||0)}%</span>${(() => { const m = publicListingMarketPosition(l, benchmarks); return m?.label ? `<span class=\"pill\" style=\"margin-left:8px;color:${m.direction==='below'?'#1f7a46':(m.direction==='above'?'#8a4a12':'#41536a')};border-color:${m.direction==='below'?'#95dbb2':(m.direction==='above'?'#f1c28f':'#c9d3de')};background:${m.direction==='below'?'#ebfff3':(m.direction==='above'?'#fff4ea':'#f4f8fc')}\">${escapeHtml(m.label)}</span>` : ''; })()}</div></div>
         <div class="dealbox">${escapeHtml(l.public_summary||'')}</div>
-        <div class="foot"><a class="btn ghost" href="listing-detail.html?id=${encodeURIComponent(l.id)}">View Listing</a><button class="btn gold" onclick="openInquiry('${escapeAttr(l.id)}')">Ask R&G</button></div>
+        <div class="foot"><a class="btn ghost" href="listing-detail.html?id=${encodeURIComponent(l.id)}">View Listing</a><button class="btn gold" onclick="openInquiry('${escapeAttr(l.id)}')">Ask RAG</button></div>
       </div>
     </article>`).join('');
 }

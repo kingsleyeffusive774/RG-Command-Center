@@ -216,7 +216,7 @@ window.GRRResolver = (function(){
       ],
       public_summary: `${latest.city}, ${latest.province} · ${latest.beds} bed · ${latest.baths} bath · ${Number(latest.sqft || 0).toLocaleString()} sqft · ${scored.ppsf ? '$'+scored.ppsf+'/sqft' : 'sqft pending'}`,
       market_slug: `${slugify(latest.province)}-${slugify(latest.city)}`,
-      source_inconsistency: conflicts.length ? { public_note: 'Some source fields were reconciled by Gary Doman & Ricki Kohli before release.' } : null,
+      source_inconsistency: conflicts.length ? { public_note: 'Some source fields were reconciled by RAG Realty before release.' } : null,
       price_history: [{ at: latest.fetched_at, price: latest.list_price }]
     };
   }

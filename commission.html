@@ -1,0 +1,94 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Commissions — RAG Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0c0d10;--panel:#131417;--panel2:#191b20;--border:#22252d;--border2:#2a2e38;--accent:#d4a843;--hot:#e8445a;--green:#2ec97a;--ink:#eaecf0;--ink2:#8e97a8;--ink3:#50586a;--mono:'DM Mono',monospace;--serif:'Fraunces',Georgia,serif;--display:'Syne',sans-serif;--radius:10px}
+html{font-family:var(--display);background:var(--bg);color:var(--ink)}body{min-height:100vh}button{font-family:inherit;cursor:pointer}a{color:inherit;text-decoration:none}
+.topbar{height:52px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:200}
+.topbar-logo{display:flex;align-items:center;gap:10px}.logo-hex{width:28px;height:28px;background:var(--accent);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:8px;color:#000}
+.topbar-name{font-weight:700;font-size:14px}.topbar-sub{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase}
+.topbar-tabs{display:flex;gap:2px}.tab-btn{padding:6px 16px;border-radius:6px;background:transparent;border:1px solid transparent;font-size:12px;font-weight:600;color:var(--ink3);transition:all .15s}.tab-btn:hover{color:var(--ink);background:var(--panel2)}.tab-btn.active{color:var(--accent);background:rgba(212,168,67,.08);border-color:rgba(212,168,67,.2)}
+.main{padding:28px;max-width:1200px;margin:0 auto}
+.page-hd{margin-bottom:20px}.page-hd h1{font-family:var(--serif);font-size:28px;font-weight:600;margin-bottom:3px}.page-hd p{font-family:var(--mono);font-size:10px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase}
+.stats-row{display:flex;gap:12px;margin-bottom:20px}.stat-mini{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;flex:1}.stat-mini .lbl{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}.stat-mini .val{font-family:var(--serif);font-size:28px;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}.card-hd h2{font-size:13px;font-weight:600}
+table{width:100%;border-collapse:collapse}th{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-weight:500}td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px}
+.tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;border:1px solid transparent;white-space:nowrap}.tag.gold{background:rgba(212,168,67,.08);color:var(--accent);border-color:rgba(212,168,67,.2)}.tag.green{background:rgba(46,201,122,.08);color:var(--green);border-color:rgba(46,201,122,.2)}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.tier{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center}
+.tier.active{border-color:var(--accent);background:rgba(212,168,67,.04)}
+.tier h3{font-family:var(--mono);font-size:11px;color:var(--ink3);margin-bottom:8px;letter-spacing:.1em;text-transform:uppercase}
+.tier .rate{font-family:var(--serif);font-size:36px;font-weight:600;color:var(--accent)}
+.tier .range{font-family:var(--mono);font-size:10px;color:var(--ink3);margin-top:6px}
+.dist{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.dist-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.dist-card h3{font-size:14px;font-weight:700;margin-bottom:4px}.dist-card .pct{font-family:var(--serif);font-size:28px;font-weight:600;margin-bottom:2px}.dist-card .amt{font-family:var(--mono);font-size:12px;color:var(--ink3)}
+.banner{border-radius:14px;padding:14px 16px;background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.20);color:#d9c28d;font-size:12px;line-height:1.6;margin-bottom:20px}
+</style>
+<script src="data/bootstrap.js"></script><script src="assets/js/utils.js"></script></head><body>
+<header class="topbar"><div class="topbar-logo"><div class="logo-hex">RAG</div><div><div class="topbar-name">RAG Command Center</div><div class="topbar-sub">Commission Tracker</div></div></div>
+<nav class="topbar-tabs"><a class="tab-btn" href="command-center.html">Dashboard</a><a class="tab-btn" href="contacts.html">Contacts</a><a class="tab-btn" href="pipeline.html">Pipeline</a><a class="tab-btn active" href="commission.html">Commissions</a><a class="tab-btn" href="settings.html">Settings</a></nav></header>
+<div class="main">
+<div class="page-hd"><h1 style="font-family:var(--serif)">Commission Tracker</h1><p>per partnership agreement §7 · tiered commission on platform-generated leads</p></div>
+<div class="banner">Commission rates per §7: Deals 1–5 = 20%, Deals 6–10 = 25%, Deal 11+ = 30%. Revenue distribution per §8: Gary Doman 51%, Ricki Kohli + Amit Khatkar 49%. All calculations on gross agent-side commission.</div>
+<div class="tiers" id="tiers"></div>
+<div class="stats-row"><div class="stat-mini"><div class="lbl">Total Deals Closed</div><div class="val" style="color:var(--green)" id="s-deals">0</div></div><div class="stat-mini"><div class="lbl">Total Gross Commission</div><div class="val" id="s-gross">$0</div></div><div class="stat-mini"><div class="lbl">Platform Revenue (§7)</div><div class="val" style="color:var(--accent)" id="s-platform">$0</div></div><div class="stat-mini"><div class="lbl">Current Tier Rate</div><div class="val" id="s-tier">20%</div></div></div>
+<div class="card"><div class="card-hd"><h2>Revenue Distribution (§8)</h2></div><div style="padding:18px"><div class="dist" id="dist"></div></div></div>
+<div class="card"><div class="card-hd"><h2>Deal Log</h2><span style="font-family:var(--mono);font-size:10px;color:var(--ink3)" id="deal-count">0 deals</span></div>
+<table><thead><tr><th>#</th><th>Date</th><th>Property</th><th>Operator</th><th>Gross Commission</th><th>Tier</th><th>Platform Fee</th></tr></thead><tbody id="deal-tbody"></tbody></table></div></div>
+<script>
+const COMM_KEY = 'rag_commission_deals';
+function loadCommDeals(){ try{ return JSON.parse(localStorage.getItem(COMM_KEY)||'[]'); }catch{ return []; } }
+function getRate(dealNum){ if(dealNum<=5) return 0.20; if(dealNum<=10) return 0.25; return 0.30; }
+function getRateLabel(dealNum){ if(dealNum<=5) return '20%'; if(dealNum<=10) return '25%'; return '30%'; }
+
+function render(){
+  const deals = loadCommDeals();
+  const totalDeals = deals.length;
+  const grossTotal = deals.reduce((s,d)=>s+(d.gross||0),0);
+  let platformTotal = 0;
+  deals.forEach((d,i) => { platformTotal += (d.gross||0) * getRate(i+1); });
+  const currentRate = getRate(totalDeals||1);
+
+  document.getElementById('s-deals').textContent = totalDeals;
+  document.getElementById('s-gross').textContent = '$'+Math.round(grossTotal).toLocaleString();
+  document.getElementById('s-platform').textContent = '$'+Math.round(platformTotal).toLocaleString();
+  document.getElementById('s-tier').textContent = getRateLabel(totalDeals||1);
+
+  // Tiers
+  document.getElementById('tiers').innerHTML = [
+    {label:'Tier 1',rate:'20%',range:'Deals 1–5',active:totalDeals>=1&&totalDeals<=5},
+    {label:'Tier 2',rate:'25%',range:'Deals 6–10',active:totalDeals>=6&&totalDeals<=10},
+    {label:'Tier 3',rate:'30%',range:'Deal 11+',active:totalDeals>=11}
+  ].map(t=>`<div class="tier${t.active?' active':''}"><h3>${t.label}</h3><div class="rate">${t.rate}</div><div class="range">${t.range}</div></div>`).join('');
+
+  // Distribution per §8
+  const gary = Math.round(platformTotal * 0.51);
+  const operators = Math.round(platformTotal * 0.49);
+  document.getElementById('dist').innerHTML = `
+    <div class="dist-card"><h3>Gary Doman</h3><div class="pct" style="color:var(--accent)">51%</div><div class="amt">$${gary.toLocaleString()}</div></div>
+    <div class="dist-card"><h3>Ricki Kohli</h3><div class="pct">24.5%</div><div class="amt">$${Math.round(operators/2).toLocaleString()}</div></div>
+    <div class="dist-card"><h3>Amit Khatkar</h3><div class="pct">24.5%</div><div class="amt">$${Math.round(operators/2).toLocaleString()}</div></div>`;
+
+  // Deal log
+  document.getElementById('deal-count').textContent = totalDeals + ' deals';
+  const tbody = document.getElementById('deal-tbody');
+  if(!deals.length){ tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;font-family:var(--mono);font-size:11px;color:var(--ink3)">No closed deals yet. Deals move here from the pipeline when marked as Closed.</td></tr>'; return; }
+  tbody.innerHTML = deals.map((d,i)=>{
+    const rate = getRate(i+1);
+    const fee = Math.round((d.gross||0)*rate);
+    return `<tr><td style="font-family:var(--mono);color:var(--ink3)">${i+1}</td><td>${d.date||'—'}</td><td style="font-weight:700">${escapeHtml(d.property||'')}</td><td>${escapeHtml(d.operator||'')}</td><td>$${(d.gross||0).toLocaleString()}</td><td><span class="tag gold">${Math.round(rate*100)}%</span></td><td style="color:var(--accent);font-weight:600">$${fee.toLocaleString()}</td></tr>`;
+  }).join('');
+}
+
+/* Seed sample data if empty */
+if(!loadCommDeals().length){
+  localStorage.setItem(COMM_KEY, JSON.stringify([
+    {date:'2026-03-01',property:'1842 Fairfield Rd, Victoria',operator:'Amit Khatkar',gross:12500},
+    {date:'2026-03-10',property:'3021 Shelbourne St, Saanich',operator:'Ricki Kohli',gross:15000},
+    {date:'2026-03-18',property:'456 W 10th Ave, Vancouver',operator:'Ricki Kohli',gross:22000}
+  ]));
+}
+render();
+</script></body></html>

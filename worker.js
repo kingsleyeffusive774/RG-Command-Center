@@ -1,5 +1,5 @@
 /**
- * R&G Command Center — Cloudflare Worker API
+ * RAG Command Center — Cloudflare Worker API
  *
  * Endpoints:
  *   GET  /api/health              → service health check
@@ -44,7 +44,7 @@ export default {
     try {
       /* health — no rate limit */
       if (path === '/api/health') {
-        return json({ status: 'ok', service: 'rg-command-center-api', ts: Date.now() });
+return json({ status: 'ok', service: 'rag-command-center-api', ts: Date.now() });
       }
 
       /* global stats — no rate limit */
@@ -323,7 +323,7 @@ async function loadIndex(env, indexKey) {
 }
 
 async function hashIP(ip) {
-  const data = new TextEncoder().encode(ip + ':rg-salt-v1');
+  const data = new TextEncoder().encode(ip + ':rag-salt-v1');
   const buf  = await crypto.subtle.digest('SHA-256', data);
   return Array.from(new Uint8Array(buf).slice(0, 8)).map(b => b.toString(16).padStart(2, '0')).join('');
 }

@@ -72,7 +72,7 @@ def to_float(value):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Populate local R&G pipeline data from open feeds plus optional local manual packs."
+        description="Populate local RAG pipeline data from open feeds plus optional local manual packs."
     )
     parser.add_argument(
         "--seed-mode",
@@ -869,7 +869,7 @@ def reconcile(raw):
             ],
             "public_summary": f"{latest.get('city','')}, {latest.get('province','')} · {latest.get('beds') or 0} bed · {latest.get('baths') or 0} bath · {int((latest.get('sqft') or 0)):,} sqft · " + (f"${ppsf}/sqft" if ppsf else "sqft pending"),
             "market_slug": f"{latest.get('province','').lower()}-{latest.get('city','').lower().replace(' ','-')}",
-            "source_inconsistency": {"public_note": "Some source fields were reconciled by Gary Doman & Ricki Kohli before release."} if local_conflicts else None,
+            "source_inconsistency": {"public_note": "Some source fields were reconciled by RAG Realty before release."} if local_conflicts else None,
             "price_history": [{"at": latest.get("fetched_at", NOW.isoformat()), "price": int(latest.get("list_price", 0))}],
         }
         for field, uniq in local_conflicts:

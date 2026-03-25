@@ -131,7 +131,7 @@ function setupTabs(){
 
 function setupHelp(){
   const steps = [
-    {t:'Gary Doman & Ricki Kohli gets everything first.', b:'This internal page is for non-stock real estate intake only. Raw source files, API pulls, verification work, source conflicts, release review, and inquiry handling all land here before anything should appear on the public directory.'},
+    {t:'RAG Realty gets everything first.', b:'This internal page is for non-stock real estate intake only. Raw source files, API pulls, verification work, source conflicts, release review, and inquiry handling all land here before anything should appear on the public directory.'},
     {t:'Settings drives intake.', b:'Use Settings to add JSON endpoints, auth headers, field maps, and sync modes. Browser-friendly APIs can populate raw source buckets directly from there.'},
     {t:'Public only reads compiled releases.', b:'The public site never reads raw source files directly. Reconcile and compile from Settings so the browser only sees verified released records.'},
     {t:'Grace period stays ready for scale.', b:'Under the first 1000 verified listings, the grace gate is bypassed for clean testing. After that, new listings can stay internal for 24 hours before release.'}

@@ -1,5 +1,5 @@
 <p align="center">
-  <strong>R&G Realty Group — Command Center</strong><br>
+  <strong>RAG Realty Group — Command Center</strong><br>
   <em>Real estate intelligence platform for the Canadian market</em>
 </p>
 
@@ -39,9 +39,9 @@
 **Public Site:** https://garebear99.github.io/RG-Command-Center/
 
 
-**R&G Command Center** is a local-first, zero-dependency real estate intelligence platform built with static HTML, vanilla JavaScript, and Python tooling. It ingests real municipal assessment data from Canadian cities, runs a multi-source reconciliation pipeline, scores every listing with a transparent deal engine, and surfaces actionable signals for investment decisions.
+**RAG Command Center** is a local-first, zero-dependency real estate intelligence platform built with static HTML, vanilla JavaScript, and Python tooling. It ingests real municipal assessment data from Canadian cities, runs a multi-source reconciliation pipeline, scores every listing with a transparent deal engine, and surfaces actionable signals for investment decisions.
 
-**R = Ricki Kohli** · **G = Gary Doman**
+**R = Ricki Kohli** · **A = Amit Khatkar** · **G = Gary Doman**
 
 ### Key Principles
 
@@ -225,7 +225,7 @@ python3 tools/populate_public_data.py --seed-mode off \
 
 ## Licensed-Market Workflow (BC Focus)
 
-R&G operates with a licensed focus on BC markets (Vancouver, Victoria). The platform implements priority routing:
+RAG operates with a licensed focus on BC markets (Vancouver, Victoria). The platform implements priority routing:
 
 1. **Licensed-city listings** (Vancouver, Victoria) → highest sort priority + `Licensed Focus` tag
 2. **BC provincial listings** → elevated priority + `BC` tag
@@ -253,7 +253,7 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ## Support the Project
 
-If R&G Command Center is useful to you, consider supporting continued development:
+If RAG Command Center is useful to you, consider supporting continued development:
 
 <p align="center">
   <a href="https://ko-fi.com/GareBear99"><img src="https://img.shields.io/badge/Ko--fi-Support_this_project-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi"></a>
@@ -272,11 +272,11 @@ You can also support by:
 
 ## License
 
-[MIT](LICENSE) — R&G Realty Group
+[MIT](LICENSE) — RAG Realty Group
 
 ---
 
 <p align="center">
-  <sub>Built with care by <a href="https://github.com/GareBear99">GareBear99</a> · R&G Realty Group</sub><br>
+  <sub>Built with care by <a href="https://github.com/GareBear99">GareBear99</a> · RAG Realty Group</sub><br>
   <sub>Vancouver · Calgary · Edmonton · Winnipeg · Montréal</sub>
 </p>

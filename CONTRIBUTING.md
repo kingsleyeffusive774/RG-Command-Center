@@ -1,4 +1,4 @@
-# Contributing to R&G Command Center
+# Contributing to RAG Command Center
 
 Thanks for your interest in contributing. This document covers the basics.
 

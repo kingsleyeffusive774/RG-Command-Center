@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Blog Post — RAG Realty Group</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/styles.css"><script src="data/bootstrap.js"></script><script src="assets/js/utils.js"></script></head><body class="public"><header class="public-header"><div class="container bar"><div class="brand">RAG <span class="accent">Realty</span> Group<small>Blog</small></div><nav class="nav"><a href="index.html">Home</a><a href="blog.html">All Posts</a><a href="deals.html">Deals</a><a href="team.html">Team</a><button class="theme-toggle" data-theme-toggle="public" data-theme-label onclick="GRRTheme.toggle('public')">Dark Theme</button><button class="primary" onclick="location.href='index.html'">Search Listings</button></nav></div></header>
+<section class="listing-hero"><div class="container"><div style="max-width:800px;margin:0 auto"><div id="postContent"><div class="banner">Loading post…</div></div><div style="margin-top:30px;padding-top:20px;border-top:1px solid var(--public-border)"><a href="blog.html" style="color:var(--public-gold);font-weight:600;font-size:14px">← Back to all posts</a></div></div></div></section>
+<footer class="public-footer"><div class="container">RAG Realty Group · Ricki Kohli · Amit Khatkar · Gary Doman</div></footer>
+<script>
+(async function(){
+  const slug = new URLSearchParams(location.search).get('slug');
+  if (!slug) { document.getElementById('postContent').innerHTML = '<div class="banner">No post selected. <a href="blog.html">Browse all posts</a></div>'; return; }
+  const res = await fetch('data/blog/posts.json');
+  const posts = await res.json();
+  const post = posts.find(p => p.slug === slug);
+  if (!post) { document.getElementById('postContent').innerHTML = '<div class="banner">Post not found. <a href="blog.html">Browse all posts</a></div>'; return; }
+  document.title = post.title + ' — RAG Realty Group';
+  document.getElementById('postContent').innerHTML = `
+    <div style="margin-bottom:12px"><span class="tag gold">${escapeHtml(post.category)}</span></div>
+    <h1 style="font-family:var(--serif);font-size:clamp(28px,4vw,48px);letter-spacing:-.03em;margin:0 0 12px">${escapeHtml(post.title)}</h1>
+    <div class="meta" style="margin-bottom:24px">${escapeHtml(post.date)} · By ${escapeHtml(post.author)}</div>
+    <div style="color:var(--public-ink);font-size:16px;line-height:1.8">${post.content}</div>
+  `;
+})();
+</script>
+<script>GRRTheme.init('public');</script></body></html>

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "ricki",
+    "name": "Ricki Kohli",
+    "role": "Operator Partner",
+    "phone": "",
+    "email": "",
+    "areas": ["Vancouver", "Surrey", "Burnaby", "Richmond"],
+    "focus": ["Residential", "Investment", "First-Time Buyers"],
+    "bio": "Ricki brings sharp market instincts and a client-first approach to every deal. With deep roots in the Greater Vancouver market, he specializes in identifying high-value opportunities for buyers and investors across BC's most competitive neighbourhoods."
+  },
+  {
+    "id": "amit",
+    "name": "Amit Khatkar",
+    "role": "Operator Partner",
+    "phone": "250-507-8949",
+    "email": "amit.khatkar@sagahomesgroup.com",
+    "areas": ["Victoria", "Saanich", "Langford", "Colwood", "Duncan", "Nanaimo"],
+    "focus": ["Residential", "New Construction", "Social Media Marketing"],
+    "bio": "Born and raised in Victoria BC, Amit is the founder of SAGA Homes Group and an award-winning REALTOR® with eXp Realty. His expertise in social media marketing, advanced advertising strategies, and deep knowledge of the Vancouver Island market delivers an experience like no other for buyers and sellers."
+  },
+  {
+    "id": "gary",
+    "name": "Gary Doman",
+    "role": "Platform Founder",
+    "phone": "",
+    "email": "",
+    "areas": ["Vancouver", "Calgary", "Edmonton", "Victoria", "Canada-wide"],
+    "focus": ["Platform Architecture", "Data Intelligence", "Deal Scoring", "Market Analysis"],
+    "bio": "Gary is the architect behind the RAG Command Center — the real estate intelligence platform powering the team's data-driven edge. He designed and built the deal scoring engine, multi-source reconciliation pipeline, GPS mapping system, and signal detection engine from the ground up. Every listing the team works passes through systems he created."
+  }
+]

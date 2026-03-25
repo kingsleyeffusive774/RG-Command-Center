@@ -1,0 +1,73 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mortgage Calculator — RAG Realty Group</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/styles.css"><script src="data/bootstrap.js"></script><script src="assets/js/utils.js"></script></head><body class="public"><header class="public-header"><div class="container bar"><div class="brand">RAG <span class="accent">Realty</span> Group<small>Mortgage Calculator</small></div><nav class="nav"><a href="index.html">Home</a><a href="deals.html">Deals</a><a href="team.html">Team</a><a href="buyer-resources.html">Buyer Guide</a><button class="theme-toggle" data-theme-toggle="public" data-theme-label onclick="GRRTheme.toggle('public')">Dark Theme</button><button class="primary" onclick="location.href='index.html'">Search Listings</button></nav></div></header>
+<section class="hero" style="padding:48px 0 36px"><div class="container inner"><div class="eyebrow">Canadian Mortgage Tools</div><h1 style="font-size:clamp(36px,5vw,64px)">Mortgage <em>Calculator</em></h1><p>Estimate your monthly or biweekly payments with Canadian-specific calculations including CMHC mortgage insurance for down payments under 20%.</p></div></section>
+<section class="section"><div class="container"><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+<div class="panel-p">
+<h3 style="font-family:var(--serif);font-size:24px;margin:0 0 18px">Enter Your Details</h3>
+<div class="form-grid">
+<div><label style="display:block;font-size:12px;color:var(--public-muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.1em">Purchase Price ($)</label><input id="mc-price" type="number" value="500000" oninput="calcMortgage()"></div>
+<div><label style="display:block;font-size:12px;color:var(--public-muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.1em">Down Payment (%)</label><input id="mc-down" type="number" value="10" min="5" max="100" step="0.5" oninput="calcMortgage()"></div>
+<div><label style="display:block;font-size:12px;color:var(--public-muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.1em">Interest Rate (%)</label><input id="mc-rate" type="number" value="5.25" step="0.01" oninput="calcMortgage()"></div>
+<div><label style="display:block;font-size:12px;color:var(--public-muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.1em">Amortization (Years)</label><select id="mc-amort" onchange="calcMortgage()"><option value="25" selected>25 years</option><option value="30">30 years</option><option value="20">20 years</option><option value="15">15 years</option><option value="10">10 years</option></select></div>
+</div>
+<div class="banner" style="margin-top:18px">
+<strong>CMHC Insurance:</strong> Required for down payments below 20% in Canada. The premium is added to your mortgage principal.
+</div>
+</div>
+<div class="panel-p">
+<h3 style="font-family:var(--serif);font-size:24px;margin:0 0 18px">Payment Summary</h3>
+<div id="mc-results">
+<div class="facts" style="grid-template-columns:1fr 1fr">
+<div class="fact"><b>Monthly Payment</b><span id="mc-monthly" style="color:var(--public-gold);font-family:var(--serif)">$0</span></div>
+<div class="fact"><b>Biweekly Payment</b><span id="mc-biweekly">$0</span></div>
+<div class="fact"><b>Mortgage Amount</b><span id="mc-mortgage">$0</span></div>
+<div class="fact"><b>Down Payment</b><span id="mc-downamt">$0</span></div>
+<div class="fact"><b>CMHC Insurance</b><span id="mc-cmhc">$0</span></div>
+<div class="fact"><b>Total Interest</b><span id="mc-interest">$0</span></div>
+<div class="fact"><b>Total Cost</b><span id="mc-total">$0</span></div>
+<div class="fact"><b>Insurance Rate</b><span id="mc-cmhcrate">0%</span></div>
+</div>
+</div>
+</div>
+</div></div></section>
+<footer class="public-footer"><div class="container">RAG Realty Group · Mortgage calculations are estimates only. Consult a licensed mortgage professional for official rates.</div></footer>
+<script>
+function getCMHCRate(downPct) {
+  if (downPct >= 20) return 0;
+  if (downPct >= 15) return 2.80;
+  if (downPct >= 10) return 3.10;
+  if (downPct >= 5)  return 4.00;
+  return 0;
+}
+function calcMortgage() {
+  const price = Number(document.getElementById('mc-price').value) || 0;
+  const downPct = Number(document.getElementById('mc-down').value) || 0;
+  const rate = Number(document.getElementById('mc-rate').value) || 0;
+  const years = Number(document.getElementById('mc-amort').value) || 25;
+  const downAmt = Math.round(price * downPct / 100);
+  const baseMortgage = price - downAmt;
+  const cmhcRate = getCMHCRate(downPct);
+  const cmhcPremium = Math.round(baseMortgage * cmhcRate / 100);
+  const totalMortgage = baseMortgage + cmhcPremium;
+  const monthlyRate = rate / 100 / 12;
+  const payments = years * 12;
+  let monthly = 0;
+  if (monthlyRate > 0) {
+    monthly = totalMortgage * (monthlyRate * Math.pow(1 + monthlyRate, payments)) / (Math.pow(1 + monthlyRate, payments) - 1);
+  } else {
+    monthly = totalMortgage / payments;
+  }
+  const totalPaid = monthly * payments;
+  const totalInterest = totalPaid - totalMortgage;
+  const fmt = v => '$' + Math.round(v).toLocaleString();
+  document.getElementById('mc-monthly').textContent = fmt(monthly);
+  document.getElementById('mc-biweekly').textContent = fmt(monthly * 12 / 26);
+  document.getElementById('mc-mortgage').textContent = fmt(totalMortgage);
+  document.getElementById('mc-downamt').textContent = fmt(downAmt);
+  document.getElementById('mc-cmhc').textContent = cmhcPremium > 0 ? fmt(cmhcPremium) : 'Not required';
+  document.getElementById('mc-interest').textContent = fmt(totalInterest);
+  document.getElementById('mc-total').textContent = fmt(totalPaid + downAmt);
+  document.getElementById('mc-cmhcrate').textContent = cmhcRate > 0 ? cmhcRate + '%' : 'N/A';
+}
+calcMortgage();
+</script>
+<script>GRRTheme.init('public');</script></body></html>
