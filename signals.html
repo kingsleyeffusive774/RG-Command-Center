@@ -293,4 +293,39 @@ renderGroups();
 
 renderHistory();
 updateStats();
+
+/* Auto-compile from public sources via Cloudflare Worker */
+(async function(){
+  try {
+    var API = 'https://rag-command-center-api.admension.workers.dev';
+    var res = await fetch(API + '/api/compile');
+    if(res.ok){
+      var data = await res.json();
+      if(data.signals && data.signals.length){
+        var history = loadHistory();
+        var existingTexts = new Set(history.map(function(h){ return (h.raw_text||h.text||'').slice(0,50); }));
+        var added = 0;
+        data.signals.forEach(function(s){
+          if(existingTexts.has((s.text||'').slice(0,50))) return;
+          history.unshift({
+            intent: s.intent||'asking',
+            score: s.score||0,
+            neighbourhoods: s.neighbourhoods||[],
+            keywords: [s.source||'auto', s.intent||''],
+            budget: s.budget,
+            beds: s.beds,
+            timeline: null,
+            preapproved: false,
+            summary: (s.source||'') + ' · ' + (s.intent||'') + ' · score ' + s.score,
+            raw_text: s.text||'',
+            created_at: new Date().toISOString(),
+            id: 'auto_' + Date.now().toString(36) + Math.random().toString(36).slice(2,5),
+            auto_compiled: true,
+            source_url: s.url||''
+          })          })          })                 if(added){ saveHistory(history); renderHistory(); updateStats(); }
+        console.log('Auto-compiled ' + added + ' signals from ' + data.sources.join(', '));
+      }
+    }
+  } catch(e){ console.log('Auto-compile skipped:', e.message); }
+})();
 </script></body></html>

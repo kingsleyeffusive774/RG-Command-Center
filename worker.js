@@ -90,6 +90,16 @@ return json({ status: 'ok', service: 'rag-command-center-api', ts: Date.now() })
         return await proxyFeed(await request.json(), env);
       }
 
+      /* GET /api/compile — auto-scrape public sources, score, store as signals */
+      if (request.method === 'GET' && path === '/api/compile') {
+        return await compilePublicSources(env);
+      }
+
+      /* GET /api/signals — list compiled signals */
+      if (request.method === 'GET' && path === '/api/signals') {
+        return await listSignals(env);
+      }
+
       return json({ error: 'not_found' }, 404);
     } catch (err) {
       console.error('Worker error:', err);
@@ -223,6 +233,113 @@ async function proxyFeed(body, env) {
 
   const data = await res.json();
   return json({ success: true, data });
+}
+
+/* ═══════════════════════════════════════════
+   AUTO-COMPILE — scrape public sources, score intent, store signals
+   Sources: Victoria Open Data, Used Victoria, Reddit (via old.reddit)
+   ═══════════════════════════════════════════ */
+
+const VIC_HOODS = ['oak bay','saanich','langford','colwood','esquimalt','sooke','sidney','view royal','fairfield','james bay','fernwood','rockland','gonzales','jubilee','burnside','gorge','tillicum','hillside','quadra','vic west','north park','harris green','cadboro bay','gordon head','brentwood bay','cordova bay','bear mountain'];
+const BUY_KW = ['looking for','searching','want to buy','need a','house hunting','pre-approved','budget','ISO','anyone selling','recommendations','first time buyer'];
+const SELL_KW = ['selling','for sale','just listed','price reduced','open house','must sell','accepting offers'];
+
+function scorePost(text) {
+  const lower = (text || '').toLowerCase();
+  if (!lower || lower.length < 20) return null;
+  const buyHits = BUY_KW.filter(w => lower.includes(w)).length;
+  const sellHits = SELL_KW.filter(w => lower.includes(w)).length;
+  const intent = buyHits > sellHits ? 'buying' : (sellHits > 0 ? 'selling' : 'asking');
+  const hoods = VIC_HOODS.filter(h => lower.includes(h));
+  const budgetMatch = text.match(/\$\s*([\d,.]+)/); 
+  const budget = budgetMatch ? parseFloat(budgetMatch[1].replace(/,/g, '')) : null;
+  const bedMatch = text.match(/(\d+)\s*(?:bed|br|bedroom)/i);
+  const beds = bedMatch ? parseInt(bedMatch[1]) : null;
+  let score = 15;
+  if (intent === 'buying') score += 25;
+  else if (intent === 'selling') score += 20;
+  if (hoods.length) score += 15;
+  if (budget && budget > 10000) score += 10;
+  if (beds) score += 5;
+  if (lower.includes('pre-approved') || lower.includes('preapproved')) score += 15;
+  if (lower.includes('asap') || lower.includes('urgent')) score += 10;
+  if (text.length > 100) score += 5;
+  return { intent, score: Math.min(100, score), neighbourhoods: hoods, budget, beds, text: text.slice(0, 500) };
+}
+
+async function compilePublicSources(env) {
+  const results = [];
+  
+  // 1. Reddit r/VictoriaBC via old.reddit (less aggressive blocking)
+  try {
+    const redditRes = await fetch('https://old.reddit.com/r/VictoriaBC/search.json?q=house+OR+condo+OR+rent+OR+buy+OR+realtor&restrict_sr=on&sort=new&limit=25&t=week', {
+      headers: { 'User-Agent': 'RAGCommandCenter/1.0 (real estate intelligence)' }
+    });
+    if (redditRes.ok) {
+      const data = await redditRes.json();
+      const posts = data?.data?.children || [];
+      for (const p of posts) {
+        const d = p.data;
+        const scored = scorePost(d.title + ' ' + (d.selftext || ''));
+        if (scored && scored.score >= 30) {
+          results.push({ ...scored, source: 'reddit', url: 'https://reddit.com' + d.permalink, author: d.author, created: d.created_utc });
+        }
+      }
+    }
+  } catch (e) { /* reddit failed, continue */ }
+  
+  // 2. Reddit r/canadahousing Victoria mentions
+  try {
+    const chRes = await fetch('https://old.reddit.com/r/canadahousing/search.json?q=victoria+BC&restrict_sr=on&sort=new&limit=10&t=week', {
+      headers: { 'User-Agent': 'RAGCommandCenter/1.0 (real estate intelligence)' }
+    });
+    if (chRes.ok) {
+      const data = await chRes.json();
+      const posts = data?.data?.children || [];
+      for (const p of posts) {
+        const d = p.data;
+        const scored = scorePost(d.title + ' ' + (d.selftext || ''));
+        if (scored && scored.score >= 30) {
+          results.push({ ...scored, source: 'reddit_canadahousing', url: 'https://reddit.com' + d.permalink, author: d.author, created: d.created_utc });
+        }
+      }
+    }
+  } catch (e) { /* continue */ }
+  
+  // 3. Victoria Open Data - building permits (renovation signal = investor/flipper lead)
+  try {
+    const odRes = await fetch('https://opendata.victoria.ca/api/v2/search?q=building+permit&num=5');
+    if (odRes.ok) {
+      const data = await odRes.json();
+      if (data.results) {
+        for (const r of data.results.slice(0, 3)) {
+          results.push({ intent: 'data_signal', score: 25, source: 'victoria_opendata', text: r.title || 'Victoria open data', url: r.url || '', neighbourhoods: [], budget: null, beds: null });
+        }
+      }
+    }
+  } catch (e) { /* continue */ }
+  
+  // Store results in KV
+  const existing = await loadIndex(env, 'signal_index');
+  const newSignals = [];
+  for (const r of results) {
+    const id = 'sig_' + genId();
+    await env.RG_DATA.put('signal:' + id, JSON.stringify({ ...r, id, compiled_at: new Date().toISOString() }), { expirationTtl: 2592000 });
+    newSignals.push(id);
+  }
+  const allIds = [...newSignals, ...existing].slice(0, 500);
+  await env.RG_DATA.put('signal_index', JSON.stringify(allIds));
+  
+  return json({ success: true, compiled: results.length, sources: ['reddit_victoriabc', 'reddit_canadahousing', 'victoria_opendata'], signals: results });
+}
+
+async function listSignals(env) {
+  const ids = await loadIndex(env, 'signal_index');
+  const limit = 50;
+  const items = (await Promise.all(
+    ids.slice(0, limit).map(id => env.RG_DATA.get('signal:' + id).then(v => v ? JSON.parse(v) : null))
+  )).filter(Boolean);
+  return json({ success: true, total: ids.length, signals: items });
 }
 
 /* ═══════════════════════════════════════════
