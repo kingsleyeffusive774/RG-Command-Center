@@ -593,6 +593,18 @@ body.theme-light .topbar, body.theme-light .card, body.theme-light .stat-card{ b
     <div class="stat-card"><div class="lbl">Top Deal Score</div><div class="val" id="s-top">–</div><div class="sub">out of 100</div></div>
     <div class="stat-card"><div class="lbl">Price Drops</div><div class="val c-warm" id="s-drops">–</div><div class="sub">listings reduced</div></div>
   </div>
+  <!-- Licensed Area Bar -->
+  <div class="card" style="margin-bottom:18px">
+    <div style="padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px"><span class="hd-dot" style="background:var(--accent);width:8px;height:8px;border-radius:50%;display:inline-block"></span><span style="font-family:var(--display);font-weight:700;font-size:13px">Licensed Area</span></div>
+      <select class="filter-select" id="cc-lm-province" onchange="updateLicensedFromCC()" style="padding:6px 10px;font-size:11px">
+        <option value="BC">BC</option><option value="AB">AB</option><option value="ON">ON</option><option value="QC">QC</option><option value="MB">MB</option><option value="SK">SK</option><option value="NS">NS</option><option value="NB">NB</option>
+      </select>
+      <input class="filter-input" id="cc-lm-cities" placeholder="Licensed cities (comma-separated)" oninput="updateLicensedFromCC()" style="width:280px;padding:6px 10px;font-size:11px">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--ink3)" id="cc-lm-status">–</span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--accent)" id="cc-lm-counts">–</span>
+    </div>
+  </div>
   <div class="two-col">
     <div class="stack">
       <div class="card">
@@ -838,10 +850,41 @@ function loadEveHistory(){
   const body = document.getElementById('eveBody');
   const history = EVE.loadChat();
   if(!history.length) return;
-  // Only load if body has just the welcome message
   if(body.children.length > 1) return;
   history.slice(-20).forEach(m => appendEveMsg(m.text, m.role));
 }
+
+/* ═══════ Licensed Area controls in dashboard ═══════ */
+function initLicensedBar(){
+  const m = loadLicensedMarkets();
+  const provEl = document.getElementById('cc-lm-province');
+  const cityEl = document.getElementById('cc-lm-cities');
+  if(provEl) provEl.value = m.province;
+  if(cityEl) cityEl.value = m.cities.join(', ');
+  refreshLicensedCounts();
+}
+function updateLicensedFromCC(){
+  const province = document.getElementById('cc-lm-province')?.value || 'BC';
+  const raw = document.getElementById('cc-lm-cities')?.value || '';
+  const cities = raw.split(',').map(c=>c.trim().toLowerCase()).filter(Boolean);
+  if(!cities.length) return;
+  saveLicensedMarkets({ province, cities });
+  const statusEl = document.getElementById('cc-lm-status');
+  if(statusEl) statusEl.textContent = 'Saved: ' + province + ' — ' + cities.join(', ');
+  refreshLicensedCounts();
+}
+async function refreshLicensedCounts(){
+  const m = loadLicensedMarkets();
+  const data = await GRR.loadData();
+  const all = data.internal.canonicalListings || [];
+  const provListings = all.filter(l=>String(l.province||'').toUpperCase()===m.province.toUpperCase());
+  const cityListings = all.filter(l=>m.cities.includes(String(l.city||'').trim().toLowerCase()));
+  const statusEl = document.getElementById('cc-lm-status');
+  const countsEl = document.getElementById('cc-lm-counts');
+  if(statusEl) statusEl.textContent = m.province + ' — ' + m.cities.join(', ');
+  if(countsEl) countsEl.textContent = cityListings.length + ' licensed-city listings · ' + provListings.length + ' provincial · ' + all.length + ' total Canada';
+}
+document.addEventListener('DOMContentLoaded', initLicensedBar);
 </script>
 
 <script>
