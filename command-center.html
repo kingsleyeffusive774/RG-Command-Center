@@ -551,7 +551,7 @@ body.theme-light .pulse-dot{ box-shadow:0 0 8px rgba(46,201,122,.35); }
 body.theme-light .topbar, body.theme-light .card, body.theme-light .stat-card{ box-shadow:0 6px 18px rgba(12,13,16,.04); }
 
 </style>
-<script src="data/bootstrap.js"></script><script src="assets/js/resolver.js"></script><script src="assets/js/compiler.js"></script><script src="assets/js/utils.js"></script><script src="assets/js/gps-fallback-map.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/command.js"></script><script src="assets/js/eve.js"></script></head>
+<script src="data/bootstrap.js"></script><script src="assets/js/resolver.js"></script><script src="assets/js/compiler.js"></script><script src="assets/js/utils.js"></script><script src="assets/js/gps-fallback-map.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/command.js"></script><script src="assets/js/autoleads.js"></script><script src="assets/js/eve.js"></script></head>
 <body>
 <div id="app">
 
@@ -1955,6 +1955,8 @@ tick(); setInterval(tick, 1000);
 populateCityOptions(document.getElementById('al-prov')?.value || 'BC');
 
 maybeLoadSeed();
+/* Auto-generate leads from listing intelligence */
+if(window.AutoLeads){ var autoLeads = AutoLeads.generate(loadListings()); if(autoLeads.length){ var existing = loadLeads(); var merged = autoLeads.map(function(al){ return { lead_id:al.id, name:al.title, phone:x27x27, email:x27x27, intent:al.type, budget_max:al.price, target_areas:[al.neighbourhood||al.city], timeline:al.action, preapproved:false, source:x27auto_intelligencex27, status:x27newx27, score:al.score, licensed_priority:3, routing_queue:x27victoria_licensedx27, notes:al.detail, task:al.action, created_at:al.created_at }; }); DB.set(x27leadsx27, merged); } }
 renderDashboard();
 </script>
 
