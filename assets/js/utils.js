@@ -52,15 +52,21 @@ window.GRR = (function(){
   async function fetchJson(path, fallback){
     const bootPath = path.replace(/^data\//,'').replace(/\.json$/,'').replace(/\//g,'.');
     const bootVal = getBootstrapValue(bootPath);
-    if (location.protocol === 'file:') return clone(typeof bootVal === 'undefined' ? fallback : bootVal);
+    /* If bootstrap already has this data, use it directly — skip network fetch */
+    if (typeof bootVal !== 'undefined' && bootVal !== null && (Array.isArray(bootVal) ? bootVal.length : true)) {
+      return bootVal;
+    }
+    if (location.protocol === 'file:') return typeof bootVal === 'undefined' ? fallback : bootVal;
     try {
       const res = await fetch(path);
       if(!res.ok) throw new Error('bad');
       return await res.json();
     }
-    catch(e){ return clone(typeof bootVal === 'undefined' ? fallback : bootVal); }
+    catch(e){ return typeof bootVal === 'undefined' ? fallback : bootVal; }
   }
+  let _dataCache = null;
   async function loadData(){
+    if (_dataCache) return _dataCache;
     const embedded = window.GRR_BOOTSTRAP || {};
     const bootstrap = {
       raw: {
@@ -104,6 +110,7 @@ window.GRR = (function(){
       markets: bootstrap.markets,
       pipelineUpdatedAt: pipeline.updated_at || null
     };
+    _dataCache = merged;
     return merged;
   }
   function currentBypassThreshold(index){ const st = loadState(); return st.graceBypassUntil || index?.grace_bypass_until_listing_count || DEFAULTS.graceBypassUntil; }

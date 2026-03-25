@@ -1,7 +1,12 @@
 
+let _releasedCache = null;
 async function getReleasedListings(){
+  if (_releasedCache) return _releasedCache;
   const data = await GRR.loadData();
-  return { data, items: GRR.getPublicListings(data) };
+  /* Use released listings directly — no expensive clone */
+  const items = data.public.releasedListings || [];
+  _releasedCache = { data, items };
+  return _releasedCache;
 }
 function toNum(v){ return Number(v || 0) || 0; }
 function normalizeType(v=''){ return String(v || '').trim().toLowerCase(); }
@@ -386,8 +391,7 @@ async function renderMarkets(){
 }
 
 async function renderDirectoryListings(){
-  const data = await GRR.loadData();
-  const released = GRR.getPublicListings(data);
+  const { data, items: released } = await getReleasedListings();
   const benchmarks = buildPublicMarketBenchmarks(released);
   initPublicFilterControls();
   const state = currentPublicFilterState();
