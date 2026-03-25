@@ -241,12 +241,16 @@ async function proxyFeed(body, env) {
    ═══════════════════════════════════════════ */
 
 const VIC_HOODS = ['oak bay','saanich','langford','colwood','esquimalt','sooke','sidney','view royal','fairfield','james bay','fernwood','rockland','gonzales','jubilee','burnside','gorge','tillicum','hillside','quadra','vic west','north park','harris green','cadboro bay','gordon head','brentwood bay','cordova bay','bear mountain'];
-const BUY_KW = ['looking for','searching','want to buy','need a','house hunting','pre-approved','budget','ISO','anyone selling','recommendations','first time buyer'];
-const SELL_KW = ['selling','for sale','just listed','price reduced','open house','must sell','accepting offers'];
+const BUY_KW = ['looking for a home','looking for a house','looking for a condo','looking for a place','want to buy a home','want to buy a house','house hunting','pre-approved','mortgage','first time buyer','first-time buyer','moving to victoria','relocating to victoria','buying a home','buying a house','looking to buy','budget for a home','down payment'];
+const SELL_KW = ['selling my home','selling my house','selling my condo','for sale by owner','fsbo','just listed','price reduced','open house','listing agent','selling property','want to sell','need to sell','thinking of selling','home for sale','house for sale'];
+const RE_REQUIRED = ['house','home','condo','apartment','property','real estate','mortgage','realtor','rent','lease','bedroom','sqft','square feet','listing','mls','strata','townhouse','duplex','lot','acre','land','zoning','assessed','renovate','flip','investment property'];
 
-function scorePost(text) {
+function scorePost(text, author) {
   const lower = (text || '').toLowerCase();
   if (!lower || lower.length < 20) return null;
+  /* Must contain at least one real estate keyword to qualify */
+  const hasRE = RE_REQUIRED.some(w => lower.includes(w));
+  if (!hasRE) return null;
   const buyHits = BUY_KW.filter(w => lower.includes(w)).length;
   const sellHits = SELL_KW.filter(w => lower.includes(w)).length;
   const intent = buyHits > sellHits ? 'buying' : (sellHits > 0 ? 'selling' : 'asking');
@@ -255,16 +259,26 @@ function scorePost(text) {
   const budget = budgetMatch ? parseFloat(budgetMatch[1].replace(/,/g, '')) : null;
   const bedMatch = text.match(/(\d+)\s*(?:bed|br|bedroom)/i);
   const beds = bedMatch ? parseInt(bedMatch[1]) : null;
-  let score = 15;
+  let score = 10;
   if (intent === 'buying') score += 25;
   else if (intent === 'selling') score += 20;
   if (hoods.length) score += 15;
-  if (budget && budget > 10000) score += 10;
+  if (budget && budget > 100000) score += 15;
   if (beds) score += 5;
-  if (lower.includes('pre-approved') || lower.includes('preapproved')) score += 15;
-  if (lower.includes('asap') || lower.includes('urgent')) score += 10;
-  if (text.length > 100) score += 5;
-  return { intent, score: Math.min(100, score), neighbourhoods: hoods, budget, beds, text: text.slice(0, 500) };
+  if (lower.includes('pre-approved') || lower.includes('preapproved') || lower.includes('mortgage')) score += 15;
+  if (lower.includes('asap') || lower.includes('urgent') || lower.includes('relocat')) score += 10;
+  if (text.length > 200) score += 5;
+  /* Credibility score based on available signals */
+  let credibility = 50;
+  if (author && author !== '[deleted]') credibility += 10;
+  if (text.length > 300) credibility += 10;
+  if (hoods.length) credibility += 15;
+  if (budget && budget > 100000) credibility += 15;
+  if (beds) credibility += 5;
+  if (lower.includes('we ') || lower.includes('my wife') || lower.includes('my husband') || lower.includes('our family')) credibility += 10;
+  if (lower.includes('pre-approved') || lower.includes('mortgage approved')) credibility += 15;
+  credibility = Math.min(100, credibility);
+  return { intent, score: Math.min(100, score), credibility, neighbourhoods: hoods, budget, beds, text: text.slice(0, 500), author: author || 'anonymous' };
 }
 
 async function compilePublicSources(env) {
@@ -280,7 +294,7 @@ async function compilePublicSources(env) {
       const posts = data?.data?.children || [];
       for (const p of posts) {
         const d = p.data;
-        const scored = scorePost(d.title + ' ' + (d.selftext || ''));
+        const scored = scorePost(d.title + ' ' + (d.selftext || ''), d.author);
         if (scored && scored.score >= 30) {
           results.push({ ...scored, source: 'reddit', url: 'https://reddit.com' + d.permalink, author: d.author, created: d.created_utc });
         }
@@ -298,7 +312,7 @@ async function compilePublicSources(env) {
       const posts = data?.data?.children || [];
       for (const p of posts) {
         const d = p.data;
-        const scored = scorePost(d.title + ' ' + (d.selftext || ''));
+        const scored = scorePost(d.title + ' ' + (d.selftext || ''), d.author);
         if (scored && scored.score >= 30) {
           results.push({ ...scored, source: 'reddit_canadahousing', url: 'https://reddit.com' + d.permalink, author: d.author, created: d.created_utc });
         }

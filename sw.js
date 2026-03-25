@@ -1,4 +1,4 @@
-const CACHE = 'rag-v13';
+const CACHE = 'rag-v14';
 const ASSETS = [
   './', './index.html', './deals.html', './directory.html', './team.html',
   './mortgage.html', './blog.html', './buyer-resources.html', './seller-resources.html',
