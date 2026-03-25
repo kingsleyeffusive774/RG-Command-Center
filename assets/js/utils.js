@@ -270,7 +270,7 @@ function loadLicensedMarkets(){
     const raw = JSON.parse(localStorage.getItem(RAG_LICENSED_KEY));
     if (raw && Array.isArray(raw.cities)) return raw;
   } catch(e){}
-  return { province: 'BC', cities: ['vancouver','victoria'] };
+  return { province: 'BC', cities: ['victoria'] };
 }
 function saveLicensedMarkets(settings){
   localStorage.setItem(RAG_LICENSED_KEY, JSON.stringify(settings));
