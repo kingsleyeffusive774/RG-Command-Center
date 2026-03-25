@@ -569,7 +569,7 @@ body.theme-light .topbar, body.theme-light .card, body.theme-light .stat-card{ b
     <button class="tab-btn" onclick="nav('listings',this)">Listings</button>
     <button class="tab-btn" onclick="nav('leads',this)">Leads</button>
     <button class="tab-btn" onclick="nav('add',this)">+ Add</button>
-    <button class="tab-btn" onclick="window.location.href='contacts.html'">Contacts</button><button class="tab-btn" onclick="window.location.href='pipeline.html'">Pipeline</button><button class="tab-btn" onclick="window.location.href='signals.html'">Signals</button><button class="tab-btn" onclick="window.location.href='commission.html'">Commissions</button><button class="tab-btn" onclick="window.location.href='settings.html'">Settings</button>
+    <button class="tab-btn" onclick="window.location.href='contacts.html'">Contacts</button><button class="tab-btn" onclick="window.location.href='pipeline.html'">Pipeline</button><button class="tab-btn" onclick="window.location.href='signals.html'">Signals</button><button class="tab-btn" onclick="window.location.href='analytics.html'">Analytics</button><button class="tab-btn" onclick="window.location.href='email-templates.html'">Email</button><button class="tab-btn" onclick="window.location.href='commission.html'">Commissions</button><button class="tab-btn" onclick="window.location.href='settings.html'">Settings</button>
   </nav>
   <div class="topbar-right">
     <button class="tab-btn" data-theme-label onclick="GRRTheme.toggle('command')">Light Theme</button>
@@ -1521,7 +1521,7 @@ function renderDashboard() {
   document.getElementById('s-active').textContent = listings.length;
   document.getElementById('s-props').textContent = new Set(listings.map(l=>l.property_id)).size + ' properties';
   const top = sortListingsForOps(listings)[0];
-  document.getElementById('s-top').textContent = top ? Math.round(top.deal_score*100) : '–';
+  document.getElementById('s-top').textContent = top ? Math.round(top.deal_score) : '–';
   document.getElementById('s-drops').textContent = drops.length;
   document.getElementById('dash-date').textContent = new Date().toLocaleDateString('en-CA',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase();
 
@@ -1553,7 +1553,7 @@ function renderDashboard() {
       <td><div class=\"deal-addr\">${escapeHtml(l.address)}</div><div class=\"deal-city\">${escapeHtml(l.city)}, ${escapeHtml(l.province)} · ${escapeHtml(postedDateLabel(l))}${marketPos?.label ? ` · ${escapeHtml(marketPos.label)}` : ''}</div></td>
       <td><div class="deal-price">${fmtPrice(l.list_price)}</div></td>
       <td style=\"font-family:var(--mono);font-size:11px;color:var(--ink2)\">${listingFactBits(l, marketBench).slice(0,4).map(escapeHtml).join(' · ') || 'Stats n/a'}</td>
-      <td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:${Math.round(l.deal_score*100)}%"></div></div><span class="score-pct">${Math.round(l.deal_score*100)}%</span></div></td>
+      <td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:${Math.round(l.deal_score)}%"></div></div><span class="score-pct">${Math.round(l.deal_score)}%</span></div></td>
       <td><div class=\"tags\">${marketTag}${buildTags(l)}</div></td>
     </tr>
   `}).join('');
@@ -1624,7 +1624,7 @@ function renderListingsView() {
         <div class="l-card-img">
           <div class="l-card-badges">${buildTags(l)}</div>
           ${window.GPSFallbackMap ? GPSFallbackMap.listingThumbnailHtml(l, {provider:'dark'}) : '🏠'}
-          ${l.deal_score>0.45?`<div class="l-card-score">Deal ${Math.round(l.deal_score*100)}%</div>`:''}
+          ${l.deal_score>45?`<div class="l-card-score">Deal ${Math.round(l.deal_score)}%</div>`:''}
         </div>
         <div class="l-card-body">
           <div class="l-card-price">${fmtPrice(l.list_price)}</div>
@@ -1837,7 +1837,7 @@ function showListingDetail(id) {
       <div class="detail-img">🏠</div>
       <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:4px">
         <div class="detail-price">${fmtPrice(l.list_price)}</div>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:600">Deal ${Math.round(l.deal_score*100)}%</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:600">Deal ${Math.round(l.deal_score)}%</div>
       </div>
       <div class=\"detail-addr\">${l.city}, ${l.province}${l.mls?' · MLS '+l.mls:''} · ${postedDateLabel(l)}${marketPos?.label ? ` · ${marketPos.label}` : ''}</div>
       <div class="tags" style="margin-bottom:14px">${buildTags(l)}</div>
