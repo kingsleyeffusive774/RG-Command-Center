@@ -49,17 +49,17 @@ async function initCommand(){
 }
 
 function renderWhoToCall(items){
-  const wrap=document.getElementById('callQueue'); if(!wrap) return;
+  const wrap=document.getElementById('cq-list')||document.getElementById('callQueue'); if(!wrap) return;
   if(!items.length){ wrap.innerHTML='<div class="queue-item"><div class="q-body"><div class="q-copy">No leads yet. Add one in the + Add tab or capture one from the public site.</div></div></div>'; return; }
   wrap.innerHTML = items.slice(0,6).map((p)=>`<div class="queue-item"><div class="ring ${escapeAttr(p.score_band||'warm')}">${escapeHtml((p.name||'?')[0])}</div><div class="q-body"><div class="q-name">${escapeHtml(p.name||'Unnamed')}</div><div class="q-meta">${escapeHtml(p.phone || '')}${p.email ? ' · '+escapeHtml(p.email) : ''}${p.timeline ? ' · '+escapeHtml(p.timeline) : ''}</div><div class="q-copy">${escapeHtml(p.notes || p.intent || '')}</div></div><div class="q-actions"><button>${p.phone && p.phone!=='—' ? 'Call' : 'Email'}</button></div></div>`).join('');
 }
 function renderTopDeals(items, benchmarks=null){
-  const wrap=document.getElementById('dealRows'); if(!wrap) return;
+  const wrap=document.getElementById('deals-tbody')||document.getElementById('dealRows'); if(!wrap) return;
   if(!items.length){ wrap.innerHTML = padRows('No listings yet'); return; }
   wrap.innerHTML = [...items].sort((a,b)=>Number(b.deal_score||0)-Number(a.deal_score||0)).slice(0,6).map(l=>{ const m=listingMarketPosition(l, benchmarks); const mTag=m?`<span class="tag ${m.direction==='below'?'below':(m.direction==='above'?'drop':'new')}">${escapeHtml(m.label)}</span>`:''; return `<tr><td><div style="font-weight:700">${escapeHtml(l.address||'')}</div><div class="tiny">${escapeHtml(l.city||'')}, ${escapeHtml(l.province||'')}</div></td><td>$${escapeHtml(l.price_label || fmtNum(l.list_price))}</td><td>${fmtNum(l.beds)}bd ${fmtNum(l.baths)}ba</td><td><span class="scorebar"><span class="scorefill" style="width:${Number(l.deal_score||0)}%"></span></span>${Number(l.deal_score||0)}%</td><td>${mTag} ${GRR.badgeTags(l).map(t=>`<span class="tag ${t[1]}">${t[0]}</span>`).join(' ')}</td></tr>`; }).join('');
 }
 function renderSignals(items){
-  const wrap=document.getElementById('signalFeed'); if(!wrap) return;
+  const wrap=document.getElementById('sig-feed')||document.getElementById('signalFeed'); if(!wrap) return;
   const rows=[]; items.forEach(l=> (l.internal_signals||[]).forEach(s => rows.push({addr:l.address, desc:s})));
   wrap.innerHTML = rows.length ? rows.slice(0,10).map((s,i)=>`<div class="sig-item"><div class="sig-ico">${['↧','◈','◌','✦'][i%4]}</div><div><div class="sig-title">${escapeHtml(s.addr||'')}</div><div class="sig-desc">${escapeHtml(s.desc||'')}</div></div></div>`).join('') : '<div class="sig-item"><div><div class="sig-desc">No signals yet.</div></div></div>';
 }
@@ -156,7 +156,7 @@ function currencyCompact(n){ if(!n) return '$0'; const m=Number(n); if(m>=100000
 function daysOnMarket(listing){ const dt = listing.first_seen_at || listing.date_listed; if(!dt) return 0; return Math.max(0, Math.floor((Date.now()-new Date(dt))/86400000)); }
 function listingPrimarySignal(l){ const signals = l.internal_signals||[]; return signals[0] || (l.flags?.price_drop ? 'Price reduced recently.' : (l.flags?.below_market ? 'Below area average.' : 'Verified internal listing.')); }
 function renderPipelineHealth(data, internalListings, publicListings, internalOnly, leads){
-  const wrap=document.getElementById('pipelineHealthList'); if(!wrap) return;
+  const wrap=document.getElementById('health-list')||document.getElementById('pipelineHealthList'); if(!wrap) return;
   const sourceRuns=(data.internal.sourceRuns?.runs||[]);
   const rawCount=(data.raw.sourceA||[]).length + (data.raw.sourceB||[]).length + (data.raw.manualUploads||[]).length;
   const unresolved=(data.internal.sourceConflicts||[]).length;
@@ -172,7 +172,7 @@ function renderPipelineHealth(data, internalListings, publicListings, internalOn
   ].map(([a,b])=>`<div class="sig-item"><div><div class="sig-title">${escapeHtml(a)}</div><div class="sig-desc">${escapeHtml(b)}</div></div></div>`).join('');
 }
 function renderListingsGridPage(items, benchmarks=null){
-  const wrap=document.getElementById('listingsGrid'); if(!wrap) return;
+  const wrap=document.getElementById('listings-grid')||document.getElementById('listingsGrid'); if(!wrap) return;
   const q=(document.getElementById('f-search')?.value||'').toLowerCase().trim();
   const beds=Number(document.getElementById('f-beds')?.value||0);
   const type=(document.getElementById('f-type')?.value||'').toLowerCase();
@@ -193,7 +193,7 @@ function renderListingsGridPage(items, benchmarks=null){
   wrap.innerHTML = rows.map((l,idx)=>{ const m=listingMarketPosition(l, benchmarks); return `<article class="listing-card ${idx===1?'hero':''}"><div class="listing-body"><div class="mini-tags">${m?.label?`<span class="tag ${m.direction==='below'?'below':(m.direction==='above'?'drop':'new')}">${escapeHtml(m.label)}</span>`:''}${GRR.badgeTags(l).map(t=>`<span class="tag ${t[1]}">${t[0]}</span>`).join(' ')}${(l.conflict_count||0)>0?'<span class="tag red">Conflict</span>':''}</div></div><div class="listing-media">${window.GPSFallbackMap ? GPSFallbackMap.listingThumbnailHtml(l, {provider:'dark'}) : '🏠'}</div><div class="listing-body"><div class="price-line">${escapeHtml(currencyCompact(l.list_price))}</div><div class="addr-line">${escapeHtml(l.address||'')}</div><div class="meta-line">${escapeHtml(l.city||'')}, ${escapeHtml(l.province||'')}${m?.label ? ` · ${escapeHtml(m.label)}` : ''}</div><div class="signal-box">• ${escapeHtml(listingPrimarySignal(l))}</div><div class="bottom-meta"><span>${fmtNum(l.beds)} bed · ${fmtNum(l.baths)} bath · ${fmtNum(l.sqft)} sqft</span><span>${daysOnMarket(l)}d</span></div></div></article>`; }).join('');
 }
 function renderLeadCardsPage(items){
-  const wrap=document.getElementById('leadCards'); if(!wrap) return;
+  const wrap=document.getElementById('leads-stack')||document.getElementById('leadCards'); if(!wrap) return;
   const active=(document.querySelector('.lead-tab.active')?.dataset.leadFilter)||'all';
   const rows=items.filter(l=>active==='all' || (l.score_band||scoreBand(l.deal_score||0))===active);
   setText('lt-all', items.length); setText('lt-hot', items.filter(l=>(l.score_band||scoreBand(l.deal_score||0))==='hot').length); setText('lt-warm', items.filter(l=>(l.score_band||scoreBand(l.deal_score||0))==='warm').length); setText('lt-cold', items.filter(l=>(l.score_band||scoreBand(l.deal_score||0))==='cold').length);
@@ -209,15 +209,16 @@ async function initCommandV12(){
   const marketBench = buildMarketBenchmarks(internalListings.length ? internalListings : publicListings);
   const leads = (data.internal.leads || []).concat((state.inquiries||[]).map(i => ({name:i.name,email:i.email,phone:i.phone||'—',score_band:i.score_band||'warm',timeline:i.timeline||'new',notes:i.notes,source:i.source||'website',market:i.market||'',budget:i.budget||'',intent:i.intent||'inquiry',created_at:i.created_at||'',preapproved:i.preapproved||false,beds_min:i.beds_min||''})));
   const topDeal = internalListings.length ? Math.max(...internalListings.map(l => Number(l.deal_score||0))) : 0;
-  setText('statHot', leads.filter(l=> (l.score_band||scoreBand(l.deal_score||0)) === 'hot').length);
-  setText('statWarm', leads.filter(l=> (l.score_band||scoreBand(l.deal_score||0)) === 'warm').length);
-  setText('statActive', internalListings.length);
-  setText('statTop', topDeal ? topDeal : '—');
-  setText('statDrops', internalListings.filter(l=>l.flags && l.flags.price_drop).length);
-  setText('statHotSub', leads.filter(l=>{ if(!l.created_at) return false; return (Date.now()-new Date(l.created_at))/86400000 < 1; }).length+' new today');
-  setText('statWarmSub', leads.length+' total leads');
-  setText('statActiveSub', internalListings.length+' properties');
-  const dd=document.getElementById('dashDateText'); if(dd) dd.textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  /* Stats — IDs match command-center.html */
+  setText('s-hot', leads.filter(l=> (l.score_band||scoreBand(l.deal_score||0)) === 'hot').length);
+  setText('s-warm', leads.filter(l=> (l.score_band||scoreBand(l.deal_score||0)) === 'warm').length);
+  setText('s-active', internalListings.length);
+  setText('s-top', topDeal ? topDeal : '—');
+  setText('s-drops', internalListings.filter(l=>l.flags && l.flags.price_drop).length);
+  setText('s-today', leads.filter(l=>{ if(!l.created_at) return false; return (Date.now()-new Date(l.created_at))/86400000 < 1; }).length+' new today');
+  setText('s-total-leads', leads.length+' total leads');
+  setText('s-props', internalListings.length+' properties');
+  const dd=document.getElementById('dash-date'); if(dd) dd.textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   renderWhoToCall(leads); renderTopDeals(internalListings, marketBench); renderSignals(internalListings); renderPipelineHealth(data, internalListings, publicListings, internalOnly, leads); renderListingsGridPage(internalListings.length?internalListings:publicListings, marketBench); renderLeadCardsPage(leads); setupHelp();
   document.querySelectorAll('.sort-pill').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.sort-pill').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); renderListingsGridPage(internalListings.length?internalListings:publicListings, marketBench);});
   ['f-search','f-beds','f-type','f-maxprice'].forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('input',()=>renderListingsGridPage(internalListings.length?internalListings:publicListings, marketBench)); if(el) el.addEventListener('change',()=>renderListingsGridPage(internalListings.length?internalListings:publicListings, marketBench));});
